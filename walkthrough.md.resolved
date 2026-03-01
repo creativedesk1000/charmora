@@ -1,0 +1,39 @@
+# Pleasant Pearl Redesign Walkthrough
+
+The Charmora website has been completely overhauled to match the luxury, minimalist aesthetic of `pleasantpearl.com`. The new design system emphasizes sophistication with an ivory, charcoal, and amber color palette, refined typography, and a spacious layout.
+
+## Key Changes
+
+- **Design System**: Global update to ivory backgrounds, dark brown (charcoal) text, and amber accents.
+- **Header**: Implemented a static header with an announcement bar, left-aligned logo, and centered navigation.
+- **Hero Section**: Redesigned for impact with a full-width cinematic image and focused centered typography.
+- **Product Card**: Switched to a 1:1 aspect ratio with rounded corners (`rounded-2xl`) and refined text styling.
+- **Shop Page**: Implemented a 4-column grid on desktop and a sidebar-style category filter.
+- **Product Detail**: Overhauled for a cleaner look with amber-themed buttons and quantity selectors.
+- **Social Media**: Integrated real links for Instagram (`cinderellaz.charmora`) and TikTok (`@charmora1000`) in the footer.
+- **WhatsApp**: Added a floating action button linked directly to WhatsApp for easy customer communication.
+
+## Visual Verification
+
+````carousel
+![Homepage Hero](file:///C:/Users/mugha/.gemini/antigravity/brain/c17ef195-30dc-45ab-8d8c-86f182896111/homepage_charmora_verification_1772385175618.png)
+<!-- slide -->
+![Homepage Best Sellers](file:///C:/Users/mugha/.gemini/antigravity/brain/c17ef195-30dc-45ab-8d8c-86f182896111/homepage_grid_charmora_verification_1772385494914.png)
+<!-- slide -->
+![Shop Page Grid](file:///C:/Users/mugha/.gemini/antigravity/brain/c17ef195-30dc-45ab-8d8c-86f182896111/shop_page_charmora_verification_1772385419493.png)
+<!-- slide -->
+![Product Detail Page](file:///C:/Users/mugha/.gemini/antigravity/brain/c17ef195-30dc-45ab-8d8c-86f182896111/product_detail_charmora_verification_1772385305298.png)
+<!-- slide -->
+![Footer & WhatsApp Button](file:///C:/Users/mugha/.gemini/antigravity/brain/c17ef195-30dc-45ab-8d8c-86f182896111/footer_and_whatsapp_verification_1772385811372.png)
+````
+
+## Verification Summary
+
+The redesign has been verified through a browser subagent across all key pages:
+- [x] Header and Footer consistency
+- [x] Homepage Hero and Grid layout
+- [x] Shop Page filters and responsive grid
+- [x] Product Detail page UI elements and typography
+- [x] Color palette and typography adherence to Pleasant Pearl aesthetic
+
+The website is now live on the development server with the new look.
