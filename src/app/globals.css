@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: var(--font-playfair), serif;
+  --font-sans: var(--font-inter), sans-serif;
+
+  --color-luxury-ivory: #FFFAF0;
+  /* Pleasant Pearl Ivory */
+  --color-luxury-charcoal: #3E2723;
+  /* Dark Brown Text */
+  --color-luxury-amber: #D97706;
+  /* Amber Accent */
+  --color-luxury-amber-light: #FBBF24;
+  --color-luxury-beige: #F5E6D3;
+
+  --animate-fade-in: fade-in 0.8s ease-out forwards;
+  --animate-slide-up: slide-up 0.8s ease-out forwards;
+  --animate-scale-in: scale-in 0.8s ease-out forwards;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-up {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes scale-in {
+    from {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+}
+
+:root {
+  --background: #FFFAF0;
+  --foreground: #3E2723;
+  --primary: #D97706;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+}
+
+.amber-gradient {
+  background: linear-gradient(to right, #D97706, #EA580C);
+}
+
+.luxury-text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.glass-morphism {
+  background: rgba(255, 250, 240, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(217, 119, 6, 0.1);
+}
