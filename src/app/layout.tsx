@@ -13,7 +13,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Cinderela Charmora | Timeless Handcrafted Elegance",
+  title: "Cinderellaz Charmora | Timeless Handcrafted Elegance",
   description: "Exquisite handmade necklaces, bracelets, and artisan accessories for the modern woman.",
 };
 
@@ -25,10 +25,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${playfair.variable} ${inter.variable} font-sans antialiased bg-luxury-ivory text-luxury-charcoal`}
+        className={`${playfair.variable} ${inter.variable} font-sans antialiased bg-charmora-beige text-charmora-purple`}
       >
         {children}
       </body>
     </html>
   );
 }
+

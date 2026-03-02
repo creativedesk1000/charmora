@@ -54,3 +54,4 @@ export const products = [
         materials: "Silk, Velvet, Gold-plated Clasp",
     }
 ];
+

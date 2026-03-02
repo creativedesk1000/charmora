@@ -4,14 +4,15 @@
   --font-serif: var(--font-playfair), serif;
   --font-sans: var(--font-inter), sans-serif;
 
-  --color-luxury-ivory: #FFFAF0;
-  /* Pleasant Pearl Ivory */
-  --color-luxury-charcoal: #3E2723;
-  /* Dark Brown Text */
-  --color-luxury-amber: #D97706;
-  /* Amber Accent */
-  --color-luxury-amber-light: #FBBF24;
-  --color-luxury-beige: #F5E6D3;
+  --color-charmora-pink: #FFD1DC;
+  /* Light Pink */
+  --color-charmora-white: #FFFFFF;
+  /* White */
+  --color-charmora-purple: #5D3455;
+  /* Dark Dull Purple */
+  --color-charmora-pink-dark: #FF69B4;
+  /* Highlight Pink */
+  --color-charmora-beige: #FFF5F7;
 
   --animate-fade-in: fade-in 0.8s ease-out forwards;
   --animate-slide-up: slide-up 0.8s ease-out forwards;
@@ -53,9 +54,9 @@
 }
 
 :root {
-  --background: #FFFAF0;
-  --foreground: #3E2723;
-  --primary: #D97706;
+  --background: #FFF5F7;
+  --foreground: #5D3455;
+  --primary: #FF69B4;
 }
 
 body {
@@ -77,8 +78,8 @@ h6 {
   color: var(--foreground);
 }
 
-.amber-gradient {
-  background: linear-gradient(to right, #D97706, #EA580C);
+.charmora-gradient {
+  background: linear-gradient(to right, #FF69B4, #5D3455);
 }
 
 .luxury-text-shadow {
@@ -86,7 +87,7 @@ h6 {
 }
 
 .glass-morphism {
-  background: rgba(255, 250, 240, 0.8);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(217, 119, 6, 0.1);
+  border: 1px solid rgba(255, 105, 180, 0.1);
 }

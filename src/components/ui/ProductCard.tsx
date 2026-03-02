@@ -25,7 +25,7 @@ export default function ProductCard({ id, name, price, image, category, classNam
             className={cn("group relative", className)}
         >
             <Link href={`/shop/${id}`} className="block">
-                <div className="aspect-square overflow-hidden bg-white relative mb-5 rounded-2xl shadow-sm border border-luxury-charcoal/5">
+                <div className="aspect-square overflow-hidden bg-white relative mb-5 rounded-2xl shadow-sm border border-charmora-purple/5">
                     <Image
                         src={image}
                         alt={name}
@@ -34,7 +34,7 @@ export default function ProductCard({ id, name, price, image, category, classNam
                         draggable={false}
                     />
                     {isBestseller && (
-                        <div className="absolute top-4 left-4 bg-[#EA580C] text-white text-[10px] uppercase tracking-widest px-3 py-1 rounded-sm font-bold shadow-lg">
+                        <div className="absolute top-4 left-4 bg-charmora-pink-dark text-white text-[10px] uppercase tracking-widest px-3 py-1 rounded-sm font-bold shadow-lg">
                             Bestseller
                         </div>
                     )}
@@ -43,14 +43,15 @@ export default function ProductCard({ id, name, price, image, category, classNam
 
             <div className="space-y-1">
                 <Link href={`/shop/${id}`}>
-                    <h3 className="text-xl font-serif text-luxury-charcoal group-hover:text-luxury-amber transition-colors duration-300 font-semibold leading-tight">
+                    <h3 className="text-xl font-serif text-charmora-purple group-hover:text-charmora-pink-dark transition-colors duration-300 font-semibold leading-tight">
                         {name}
                     </h3>
                 </Link>
-                <p className="text-lg text-luxury-amber font-sans font-bold">
+                <p className="text-lg text-charmora-pink-dark font-sans font-bold">
                     {price.toLocaleString()} PKR
                 </p>
             </div>
         </motion.div>
     );
 }
+

@@ -16,10 +16,10 @@ export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     return (
-        <header className="w-full bg-luxury-ivory border-b border-luxury-amber/10">
+        <header className="w-full bg-white border-b border-charmora-pink/20">
             {/* Announcement Bar */}
-            <div className="bg-[#fff3e0] py-2 px-4 text-center border-b border-luxury-amber/5">
-                <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-luxury-amber font-medium">
+            <div className="bg-[#FFF5F7] py-2 px-4 text-center border-b border-charmora-pink/10">
+                <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-charmora-purple font-medium">
                     Orders placed after 23 February will be delivered after Eid
                 </p>
             </div>
@@ -27,7 +27,7 @@ export default function Header() {
             <div className="max-w-7xl mx-auto px-6 md:px-12 py-6 flex items-center justify-between relative">
                 {/* Mobile Menu Button - Left Aligned */}
                 <div className="md:hidden z-20 w-10 flex justify-start">
-                    <button className="text-luxury-charcoal p-1" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                    <button className="text-charmora-purple p-1" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                         {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
                     </button>
                 </div>
@@ -35,14 +35,29 @@ export default function Header() {
                 {/* Logo - Centered on Mobile, Left Aligned on Desktop */}
                 <Link
                     href="/"
-                    className="flex flex-col items-center md:items-start z-20 absolute left-1/2 -translate-x-1/2 md:static md:left-0 md:translate-x-0"
+                    className="flex flex-col items-center md:items-start z-20 absolute left-1/2 -translate-x-1/2 md:static md:left-0 md:translate-x-0 group"
                 >
-                    <span className="text-xl md:text-2xl font-serif tracking-tight text-luxury-charcoal leading-tight">
-                        Cinderela
-                    </span>
-                    <span className="text-[8px] md:text-[10px] uppercase tracking-[0.4em] -mt-1 text-luxury-amber font-sans font-semibold text-center md:text-left">
-                        Charmora
-                    </span>
+                    <div className="relative h-12 w-32 md:h-16 md:w-40 flex items-center justify-center">
+                        {/* Placeholder for real logo image */}
+                        <img
+                            src="/logo.jpeg"
+                            alt="Cinderellaz Charmora"
+                            className="h-full w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                            onError={(e) => {
+                                // Fallback to text if image not found
+                                e.currentTarget.style.display = 'none';
+                                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                            }}
+                        />
+                        <div className="hidden flex flex-col items-center md:items-start">
+                            <span className="text-xl md:text-2xl font-serif tracking-tight text-charmora-purple leading-tight">
+                                Cinderellaz
+                            </span>
+                            <span className="text-[8px] md:text-[10px] uppercase tracking-[0.4em] -mt-1 text-charmora-pink-dark font-sans font-semibold text-center md:text-left">
+                                Charmora
+                            </span>
+                        </div>
+                    </div>
                 </Link>
 
                 {/* Navigation - Center (Desktop Only) */}
@@ -51,11 +66,11 @@ export default function Header() {
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-xs uppercase tracking-[0.2em] text-luxury-charcoal/80 hover:text-luxury-amber transition-colors duration-300 font-sans font-medium relative group"
+                            className="text-xs uppercase tracking-[0.2em] text-charmora-purple/80 hover:text-charmora-pink-dark transition-colors duration-300 font-sans font-medium relative group"
                         >
                             {link.name}
                             {link.name === "Collections" && (
-                                <span className="absolute -top-3 -right-6 bg-luxury-amber text-white text-[8px] px-1.5 py-0.5 rounded-full font-bold">
+                                <span className="absolute -top-3 -right-6 bg-charmora-pink-dark text-white text-[8px] px-1.5 py-0.5 rounded-full font-bold">
                                     New
                                 </span>
                             )}
@@ -65,10 +80,10 @@ export default function Header() {
 
                 {/* Actions - Right aligned */}
                 <div className="flex items-center space-x-5 z-20 w-10 md:w-auto justify-end">
-                    <button className="text-luxury-charcoal hover:text-luxury-amber transition-colors duration-300">
+                    <button className="text-charmora-purple hover:text-charmora-pink-dark transition-colors duration-300">
                         <Search size={20} strokeWidth={1.5} />
                     </button>
-                    <button className="text-luxury-charcoal hover:text-luxury-amber transition-colors duration-300 relative">
+                    <button className="text-charmora-purple hover:text-charmora-pink-dark transition-colors duration-300 relative">
                         <ShoppingBag size={20} strokeWidth={1.5} />
                     </button>
                 </div>
@@ -81,19 +96,19 @@ export default function Header() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="bg-luxury-ivory border-b border-luxury-amber/10 overflow-hidden md:hidden"
+                        className="bg-white border-b border-charmora-pink/10 overflow-hidden md:hidden"
                     >
                         <div className="flex flex-col space-y-4 p-8">
                             {navLinks.map((link) => (
                                 <Link
                                     key={link.name}
                                     href={link.href}
-                                    className="text-lg font-serif text-luxury-charcoal flex items-center justify-between"
+                                    className="text-lg font-serif text-charmora-purple flex items-center justify-between"
                                     onClick={() => setMobileMenuOpen(false)}
                                 >
                                     {link.name}
                                     {link.name === "Collections" && (
-                                        <span className="bg-luxury-amber text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
+                                        <span className="bg-charmora-pink-dark text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
                                             New
                                         </span>
                                     )}
@@ -106,3 +121,4 @@ export default function Header() {
         </header>
     );
 }
+

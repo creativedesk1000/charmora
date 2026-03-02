@@ -10,16 +10,16 @@ export default function ShippingPage() {
         >
             <div className="space-y-12">
                 <section>
-                    <h2 className="text-xl font-serif text-luxury-charcoal mb-4">Complimentary Global Shipping</h2>
+                    <h2 className="text-xl font-serif text-charmora-purple mb-4">Complimentary Global Shipping</h2>
                     <p>
-                        At Cinderela Charmora, we believe the luxury experience begins the moment you place your order.
+                        At Cinderellaz Charmora, we believe the luxury experience begins the moment you place your order.
                         We offer complimentary insured shipping on all orders worldwide. Each piece is carefully
                         packaged in our signature luxury gift box, ensuring it arrives in pristine condition.
                     </p>
                 </section>
 
                 <section>
-                    <h2 className="text-xl font-serif text-luxury-charcoal mb-4">Delivery Timelines</h2>
+                    <h2 className="text-xl font-serif text-charmora-purple mb-4">Delivery Timelines</h2>
                     <ul className="list-disc pl-5 space-y-2">
                         <li><strong>Domestic:</strong> 3-5 business days</li>
                         <li><strong>International:</strong> 7-12 business days (subject to customs)</li>
@@ -31,7 +31,7 @@ export default function ShippingPage() {
                 </section>
 
                 <section>
-                    <h2 className="text-xl font-serif text-luxury-charcoal mb-4">Refined Returns</h2>
+                    <h2 className="text-xl font-serif text-charmora-purple mb-4">Refined Returns</h2>
                     <p>
                         We want you to be absolutely delighted with your selection. If for any reason you are not
                         completely satisfied, we accept returns within 14 days of delivery.
@@ -45,3 +45,4 @@ export default function ShippingPage() {
         </UtilityPage>
     );
 }
+

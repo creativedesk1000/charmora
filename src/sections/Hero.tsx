@@ -22,13 +22,35 @@ export default function Hero() {
                     transition={{ duration: 1, ease: "easeOut" }}
                 >
                     <h1 className="text-4xl md:text-8xl text-white mb-10 leading-[1.15] font-serif font-medium tracking-tight">
-                        Discover <span className="text-luxury-amber">Elegance</span> <br /> in Every Detail
+                        Discover <motion.span
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.5, duration: 1 }}
+                            className="text-charmora-pink-dark"
+                        >Elegance</motion.span> <br /> in Every Detail
                     </h1>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                         <Link href="/shop">
-                            <Button variant="primary" size="lg" className="w-full sm:w-auto min-w-[200px]">
-                                Shop Now
-                            </Button>
+                            <motion.div
+                                animate={{
+                                    scale: [1, 1.02, 1],
+                                }}
+                                transition={{
+                                    duration: 2,
+                                    repeat: Infinity,
+                                    ease: "easeInOut"
+                                }}
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                <Button
+                                    variant="primary"
+                                    size="lg"
+                                    className="w-full sm:w-auto min-w-[200px] border-2 border-white/50 backdrop-blur-sm shadow-[0_0_25px_rgba(255,105,180,0.5)] hover:shadow-[0_0_40px_rgba(255,105,180,0.7)] transition-all duration-300"
+                                >
+                                    Shop Now
+                                </Button>
+                            </motion.div>
                         </Link>
                     </div>
                 </motion.div>
@@ -36,3 +58,4 @@ export default function Hero() {
         </section>
     );
 }
+
