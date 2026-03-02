@@ -26,7 +26,7 @@ export default function Hero() {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.5, duration: 1 }}
-                            className="text-charmora-pink-dark"
+                            className="text-charmora-cream"
                         >Elegance</motion.span> <br /> in Every Detail
                     </h1>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
