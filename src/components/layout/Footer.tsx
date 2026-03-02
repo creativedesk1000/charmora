@@ -10,7 +10,7 @@ export default function Footer() {
                 {/* Brand Column */}
                 <div className="col-span-1 md:col-span-1">
                     <Link href="/" className="inline-flex flex-col items-start mb-8">
-                        <span className="text-3xl font-serif text-charmora-purple font-bold">Cinderellaz</span>
+                        <span className="text-3xl font-serif text-charmora-purple font-bold">Cinderella's</span>
                         <span className="text-[10px] uppercase tracking-[0.4em] -mt-1 text-charmora-pink-dark font-sans font-bold">Charmora</span>
                     </Link>
                     <p className="text-sm text-charmora-purple/70 leading-relaxed font-sans max-w-xs">
@@ -65,7 +65,7 @@ export default function Footer() {
             </div>
 
             <div className="max-w-7xl mx-auto pt-8 border-t border-charmora-pink/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] uppercase tracking-widest text-charmora-purple/40 font-bold">
-                <p>© {currentYear} Cinderellaz Charmora. Crafted with Pride.</p>
+                <p>© {currentYear} Cinderella's Charmora. Crafted with Pride.</p>
                 <div className="flex gap-8">
                     <Link href="/privacy" className="hover:text-charmora-pink-dark transition-colors">Privacy</Link>
                     <Link href="/terms" className="hover:text-charmora-pink-dark transition-colors">Terms</Link>

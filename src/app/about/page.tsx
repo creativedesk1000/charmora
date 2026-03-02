@@ -17,7 +17,7 @@ export default function AboutPage() {
                         animate={{ opacity: 1 }}
                         className="text-xs uppercase tracking-[0.4em] text-charmora-pink-dark font-medium mb-8 block font-sans"
                     >
-                        The Soul of Cinderellaz Charmora
+                        The Soul of Cinderella's Charmora
                     </motion.span>
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
@@ -50,7 +50,7 @@ export default function AboutPage() {
                             <h2 className="text-4xl font-serif text-charmora-purple mb-8">Our Philosophy</h2>
                             <div className="space-y-6 text-charmora-purple/70 leading-relaxed font-sans">
                                 <p>
-                                    Born out of a passion for intricate handiwork, Cinderellaz Charmora was established with a singular vision: to create jewelry that feels like a second skin—intimate, beautiful, and profoundly personal.
+                                    Born out of a passion for intricate handiwork, Cinderella's Charmora was established with a singular vision: to create jewelry that feels like a second skin—intimate, beautiful, and profoundly personal.
                                 </p>
                                 <p>
                                     We believe that the most luxury isn't found in mass production, but in the slow, deliberate work of the human hand. Each of our pieces is a tribute to the "art of the small"—the tiny details that make a grand impression.
@@ -81,7 +81,7 @@ export default function AboutPage() {
                             <h2 className="text-4xl font-serif text-charmora-purple mb-8">A Visionary Journey</h2>
                             <div className="space-y-6 text-charmora-purple/70 leading-relaxed font-sans">
                                 <p>
-                                    Founded by a collective of artists and designers, our journey began in a small seaside studio. Today, Cinderellaz Charmora carries that same spirit of serenity and creative freedom into every international collection.
+                                    Founded by a collective of artists and designers, our journey began in a small seaside studio. Today, Cinderella's Charmora carries that same spirit of serenity and creative freedom into every international collection.
                                 </p>
                                 <p>
                                     We invite you to explore a world where tradition is celebrated through a modern lens, and where every accessory is a conversation between the artisan and you.

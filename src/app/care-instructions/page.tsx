@@ -12,7 +12,7 @@ export default function CareInstructionsPage() {
                 <section>
                     <h2 className="text-xl font-serif text-charmora-purple mb-4">The Art of Preservation</h2>
                     <p>
-                        Cinderellaz Charmora jewelry is designed to be cherished for a lifetime and passed down through
+                        Cinderella's Charmora jewelry is designed to be cherished for a lifetime and passed down through
                         generations. To maintain the exquisite luster of your pieces, a little mindful care goes a long way.
                     </p>
                 </section>
@@ -28,7 +28,7 @@ export default function CareInstructionsPage() {
                     <div className="p-8 bg-charmora-pink/10 border border-charmora-pink-dark/5">
                         <h3 className="text-sm uppercase tracking-widest text-charmora-pink-dark mb-4 font-semibold">Proper Storage</h3>
                         <p className="text-sm leading-relaxed">
-                            When not in use, store your jewelry in the provided Cinderellaz Charmora pouch or a lined
+                            When not in use, store your jewelry in the provided Cinderella's Charmora pouch or a lined
                             jewelry box. Keep pieces separate to avoid scratching.
                         </p>
                     </div>

@@ -12,7 +12,7 @@ export default function ShippingPage() {
                 <section>
                     <h2 className="text-xl font-serif text-charmora-purple mb-4">Complimentary Global Shipping</h2>
                     <p>
-                        At Cinderellaz Charmora, we believe the luxury experience begins the moment you place your order.
+                        At Cinderella's Charmora, we believe the luxury experience begins the moment you place your order.
                         We offer complimentary insured shipping on all orders worldwide. Each piece is carefully
                         packaged in our signature luxury gift box, ensuring it arrives in pristine condition.
                     </p>

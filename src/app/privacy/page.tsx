@@ -14,7 +14,7 @@ export default function PrivacyPage() {
                 <section>
                     <h2 className="text-xl font-serif text-charmora-purple mb-4">Our Commitment</h2>
                     <p>
-                        At Cinderellaz Charmora, we respect your privacy and are committed to protecting it. This policy
+                        At Cinderella's Charmora, we respect your privacy and are committed to protecting it. This policy
                         outlines how we collect, use, and safeguard your information when you visit our boutique online.
                     </p>
                 </section>

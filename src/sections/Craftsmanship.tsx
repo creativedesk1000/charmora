@@ -43,7 +43,7 @@ export default function Craftsmanship() {
                         </h2>
                         <div className="space-y-6 text-charmora-purple/70 leading-relaxed font-sans">
                             <p>
-                                At Cinderellaz Charmora, every piece of jewelry tells a story of dedication, patience, and meticulous skill. Our master artisans blend age-old techniques with modern design sensibilities.
+                                At Cinderella's Charmora, every piece of jewelry tells a story of dedication, patience, and meticulous skill. Our master artisans blend age-old techniques with modern design sensibilities.
                             </p>
                             <p>
                                 From the initial sketch to the final polish, each accessory undergoes a rigorous process of creation. We source only the finest sustainable materials to ensure that your charm remains as timeless as its inspiration.

@@ -13,8 +13,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Cinderellaz Charmora | Timeless Handcrafted Elegance",
+  title: "Cinderella's Charmora | Timeless Handcrafted Elegance",
   description: "Exquisite handmade necklaces, bracelets, and artisan accessories for the modern woman.",
+  icons: {
+    icon: "/favicon.jpeg",
+  },
 };
 
 export default function RootLayout({

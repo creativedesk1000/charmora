@@ -25,7 +25,7 @@ export default function Home() {
       <section className="py-24 px-6 md:px-12 bg-white">
         <div className="max-w-7xl mx-auto text-center mb-16">
           <h2 className="text-3xl font-serif text-charmora-purple">Follow Our Journey</h2>
-          <p className="text-xs uppercase tracking-widest text-charmora-pink-dark mt-4 font-sans">@CinderellazCharmora</p>
+          <p className="text-xs uppercase tracking-widest text-charmora-pink-dark mt-4 font-sans">@CinderellasCharmora</p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {[1, 2, 3, 4, 5].map((i) => (

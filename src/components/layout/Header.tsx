@@ -37,26 +37,13 @@ export default function Header() {
                     href="/"
                     className="flex flex-col items-center md:items-start z-20 absolute left-1/2 -translate-x-1/2 md:static md:left-0 md:translate-x-0 group"
                 >
-                    <div className="relative h-12 w-32 md:h-16 md:w-40 flex items-center justify-center">
-                        {/* Placeholder for real logo image */}
-                        <img
-                            src="/logo.jpeg"
-                            alt="Cinderellaz Charmora"
-                            className="h-full w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                            onError={(e) => {
-                                // Fallback to text if image not found
-                                e.currentTarget.style.display = 'none';
-                                e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                            }}
-                        />
-                        <div className="hidden flex flex-col items-center md:items-start">
-                            <span className="text-xl md:text-2xl font-serif tracking-tight text-charmora-purple leading-tight">
-                                Cinderellaz
-                            </span>
-                            <span className="text-[8px] md:text-[10px] uppercase tracking-[0.4em] -mt-1 text-charmora-pink-dark font-sans font-semibold text-center md:text-left">
-                                Charmora
-                            </span>
-                        </div>
+                    <div className="flex flex-col items-center md:items-start transition-transform duration-300 group-hover:scale-105">
+                        <span className="text-xl md:text-2xl font-serif tracking-tight text-charmora-purple leading-tight">
+                            Cinderella's
+                        </span>
+                        <span className="text-[8px] md:text-[10px] uppercase tracking-[0.4em] -mt-1 text-charmora-pink-dark font-sans font-semibold text-center md:text-left">
+                            Charmora
+                        </span>
                     </div>
                 </Link>
 

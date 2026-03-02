@@ -14,7 +14,7 @@ export default function TermsPage() {
                 <section>
                     <h2 className="text-xl font-serif text-charmora-purple mb-4">Acceptance of Terms</h2>
                     <p>
-                        By accessing and using the Cinderellaz Charmora website, you agree to be bound by these
+                        By accessing and using the Cinderella's Charmora website, you agree to be bound by these
                         Terms of Service and all applicable laws and regulations.
                     </p>
                 </section>
@@ -23,7 +23,7 @@ export default function TermsPage() {
                     <h2 className="text-xl font-serif text-charmora-purple mb-4">Intellectual Property</h2>
                     <p>
                         All content on this site, including jewelry designs, imagery, brand names, and text, is
-                        the exclusive property of Cinderellaz Charmora and is protected by international copyright laws.
+                        the exclusive property of Cinderella's Charmora and is protected by international copyright laws.
                     </p>
                 </section>
 
@@ -39,7 +39,7 @@ export default function TermsPage() {
                 <section>
                     <h2 className="text-xl font-serif text-charmora-purple mb-4">Limitation of Liability</h2>
                     <p>
-                        Cinderellaz Charmora shall not be liable for any indirect, incidental, or consequential
+                        Cinderella's Charmora shall not be liable for any indirect, incidental, or consequential
                         damages resulting from the use or inability to use our services or products.
                     </p>
                 </section>
