@@ -25,20 +25,27 @@ export default function Header() {
             </div>
 
             <div className="max-w-7xl mx-auto px-6 md:px-12 py-6 flex items-center justify-between relative">
-                {/* Logo - Left aligned */}
+                {/* Mobile Menu Button - Left Aligned */}
+                <div className="md:hidden z-20 w-10 flex justify-start">
+                    <button className="text-luxury-charcoal p-1" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                        {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                    </button>
+                </div>
+
+                {/* Logo - Centered on Mobile, Left Aligned on Desktop */}
                 <Link
                     href="/"
-                    className="flex flex-col items-start z-20"
+                    className="flex flex-col items-center md:items-start z-20 absolute left-1/2 -translate-x-1/2 md:static md:left-0 md:translate-x-0"
                 >
                     <span className="text-xl md:text-2xl font-serif tracking-tight text-luxury-charcoal leading-tight">
                         Cinderela
                     </span>
-                    <span className="text-[8px] md:text-[10px] uppercase tracking-[0.4em] -mt-1 text-luxury-amber font-sans font-semibold">
+                    <span className="text-[8px] md:text-[10px] uppercase tracking-[0.4em] -mt-1 text-luxury-amber font-sans font-semibold text-center md:text-left">
                         Charmora
                     </span>
                 </Link>
 
-                {/* Navigation - Center */}
+                {/* Navigation - Center (Desktop Only) */}
                 <nav className="hidden md:flex items-center absolute left-1/2 -translate-x-1/2 space-x-10">
                     {navLinks.map((link) => (
                         <Link
@@ -57,10 +64,7 @@ export default function Header() {
                 </nav>
 
                 {/* Actions - Right aligned */}
-                <div className="flex items-center space-x-5 z-20">
-                    <button className="md:hidden text-luxury-charcoal p-1" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-                        {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-                    </button>
+                <div className="flex items-center space-x-5 z-20 w-10 md:w-auto justify-end">
                     <button className="text-luxury-charcoal hover:text-luxury-amber transition-colors duration-300">
                         <Search size={20} strokeWidth={1.5} />
                     </button>
