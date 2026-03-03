@@ -38,27 +38,44 @@ model User {
 }
 
 model Category {
-  id        String    @id @default(cuid())
-  name      String    @unique
-  slug      String    @unique
-  products  Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id            String         @id @default(cuid())
+  name          String         @unique
+  slug          String         @unique
+  subCategories SubCategory[]
+  products      Product[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model SubCategory {
+  id         String    @id @default(cuid())
+  name       String
+  slug       String    @unique
+  category   Category  @relation(fields: [categoryId], references: [id])
+  categoryId String
+  products   Product[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 }
 
 model Product {
-  id          String        @id @default(cuid())
-  title       String
-  description String
-  price       Float
-  stock       Int           @default(0)
-  image       String?
-  status      ProductStatus @default(ACTIVE)
-  category    Category      @relation(fields: [categoryId], references: [id])
-  categoryId  String
-  orderItems  OrderItem[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id            String        @id @default(cuid())
+  title         String
+  description   String
+  price         Float
+  stock         Int           @default(0)
+  image         String?
+  status        ProductStatus @default(ACTIVE)
+  isBestseller  Boolean       @default(false)
+  isNewArrival  Boolean       @default(false)
+  isFeatured    Boolean       @default(false)
+  category      Category      @relation(fields: [categoryId], references: [id])
+  categoryId    String
+  subCategory   SubCategory?  @relation(fields: [subCategoryId], references: [id])
+  subCategoryId String?
+  orderItems    OrderItem[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
 model Order {
