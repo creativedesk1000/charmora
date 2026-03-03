@@ -38,7 +38,7 @@ export default function Craftsmanship() {
                         <div className="max-w-3xl space-y-6 text-gray-500 leading-relaxed font-sans italic relative">
                             <span className="absolute -top-4 -left-4 text-6xl text-orange-100 font-serif -z-10">"</span>
                             <p className="text-sm md:text-lg">
-                                Hi, I'm Ramsha, the owner of Pleasant Pearl. I started this small business in November 2023 with the dream of becoming independent and sharing unique handmade jewelry you won't find anywhere else.
+                                Hi, I'm Cinderella, the owner of Charmora. I started this small business in November 2023 with the dream of becoming independent and sharing unique handmade jewelry you won't find anywhere else.
                             </p>
                             <p className="text-sm md:text-lg">
                                 Every piece is made with love and high-quality materials. I'm so grateful to have you as part of my journey ❤️
