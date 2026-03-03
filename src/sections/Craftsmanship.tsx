@@ -2,71 +2,83 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 
 export default function Craftsmanship() {
     return (
-        <section className="py-24 px-6 md:px-12 bg-charmora-pink/20 overflow-hidden">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                {/* Visual Content */}
-                <div className="relative order-2 lg:order-1">
-                    <motion.div
-                        initial={{ opacity: 0, x: -50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1 }}
-                        className="relative aspect-[4/5] bg-charmora-beige"
-                    >
-                        <Image
-                            src="https://images.unsplash.com/photo-1531995811006-35cb42e1a022?q=80&w=1000&auto=format&fit=crop"
-                            alt="Artisan at work"
-                            fill
-                            className="object-cover"
-                        />
-                    </motion.div>
-                </div>
+        <section className="py-24 px-6 md:px-12 bg-[#FFF9F5] relative overflow-hidden">
+            {/* Background decorative elements if needed */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-charmora-pink/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
 
-                {/* Text Content */}
-                <div className="order-1 lg:order-2">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                    >
-                        <span className="text-xs uppercase tracking-[0.4em] text-charmora-pink-dark font-medium mb-6 block font-sans">
-                            The Artisan Touch
-                        </span>
-                        <h2 className="text-4xl md:text-5xl text-charmora-purple font-serif mb-8 leading-tight">
-                            Honoring the Art <br /> of Handsmanship
+            <div className="max-w-5xl mx-auto">
+                <div className="bg-white rounded-3xl p-8 md:p-16 shadow-xl border border-orange-100/50 relative">
+                    <div className="flex flex-col items-center text-center">
+                        {/* Logo/Avatar */}
+                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-6 border-4 border-orange-50 shadow-inner">
+                            <Image
+                                src="/favicon.jpeg"
+                                alt="Charmora Logo"
+                                width={128}
+                                height={128}
+                                className="object-cover"
+                            />
+                        </div>
+
+                        {/* Badge */}
+                        <div className="inline-block px-4 py-1.5 bg-[#EE8E3B] text-white text-[10px] uppercase tracking-widest font-bold rounded-full mb-6">
+                            ✦ OUR STORY
+                        </div>
+
+                        {/* Heading */}
+                        <h2 className="text-3xl md:text-5xl text-charmora-purple font-serif mb-8 leading-tight max-w-2xl">
+                            Crafting Elegance, Since 2023
                         </h2>
-                        <div className="space-y-6 text-charmora-purple/70 leading-relaxed font-sans">
-                            <p>
-                                At Cinderella's Charmora, every piece of jewelry tells a story of dedication, patience, and meticulous skill. Our master artisans blend age-old techniques with modern design sensibilities.
+
+                        {/* Message */}
+                        <div className="max-w-3xl space-y-6 text-gray-500 leading-relaxed font-sans italic relative">
+                            <span className="absolute -top-4 -left-4 text-6xl text-orange-100 font-serif -z-10">"</span>
+                            <p className="text-sm md:text-lg">
+                                Hi, I'm Ramsha, the owner of Pleasant Pearl. I started this small business in November 2023 with the dream of becoming independent and sharing unique handmade jewelry you won't find anywhere else.
                             </p>
-                            <p>
-                                From the initial sketch to the final polish, each accessory undergoes a rigorous process of creation. We source only the finest sustainable materials to ensure that your charm remains as timeless as its inspiration.
+                            <p className="text-sm md:text-lg">
+                                Every piece is made with love and high-quality materials. I'm so grateful to have you as part of my journey ❤️
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-8 mt-12 mb-12">
-                            <div>
-                                <h4 className="text-charmora-pink-dark text-2xl font-serif mb-2 italic">100%</h4>
-                                <p className="text-[10px] uppercase tracking-widest text-charmora-purple/60 font-sans">Handcrafted Artistry</p>
-                            </div>
-                            <div>
-                                <h4 className="text-charmora-pink-dark text-2xl font-serif mb-2 italic">Limited</h4>
-                                <p className="text-[10px] uppercase tracking-widest text-charmora-purple/60 font-sans">Edition Designs</p>
-                            </div>
+                        {/* Buttons */}
+                        <div className="flex flex-col sm:flex-row gap-4 mt-12">
+                            <Link
+                                href="/shop"
+                                className="px-10 py-3 bg-[#EE8E3B] text-white rounded-full hover:bg-[#D07E2E] transition-colors duration-300 font-medium shadow-md"
+                            >
+                                Explore Collection →
+                            </Link>
+                            <Link
+                                href="/contact"
+                                className="px-10 py-3 border-2 border-orange-100 text-gray-600 rounded-full hover:bg-orange-50 transition-colors duration-300 font-medium"
+                            >
+                                Contact Us
+                            </Link>
                         </div>
 
-                        <Link href="/about">
-                            <Button variant="outline" className="border-charmora-pink-dark/50 text-charmora-pink-dark">
-                                Meet the Makers
-                            </Button>
-                        </Link>
-                    </motion.div>
+                        {/* Stats */}
+                        <div className="w-full mt-16 pt-16 border-t border-gray-100">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 text-center">
+                                <div className="space-y-2">
+                                    <div className="text-2xl font-bold text-charmora-purple font-sans">100%</div>
+                                    <div className="text-xs uppercase tracking-widest text-gray-400 font-sans font-medium">Handcrafted</div>
+                                </div>
+                                <div className="space-y-2">
+                                    <div className="text-2xl font-bold text-charmora-purple font-sans">500+</div>
+                                    <div className="text-xs uppercase tracking-widest text-gray-400 font-sans font-medium">Happy Clients</div>
+                                </div>
+                                <div className="space-y-2">
+                                    <div className="text-2xl font-bold text-charmora-purple font-sans">Ethical</div>
+                                    <div className="text-xs uppercase tracking-widest text-gray-400 font-sans font-medium">Sourcing</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
