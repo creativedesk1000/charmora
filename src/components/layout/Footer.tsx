@@ -69,6 +69,7 @@ export default function Footer() {
                 <div className="flex gap-8">
                     <Link href="/privacy" className="hover:text-charmora-pink-dark transition-colors">Privacy</Link>
                     <Link href="/terms" className="hover:text-charmora-pink-dark transition-colors">Terms</Link>
+                    <Link href="/admin" className="hover:text-charmora-pink-dark transition-colors border-l border-charmora-pink/10 pl-8">Admin</Link>
                 </div>
             </div>
         </footer>

@@ -5,23 +5,36 @@ import { ShieldCheck, ArrowRight, Lock, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { signIn } from "next-auth/react";
 
 export default function AdminLoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoading(true);
 
-        // Developer Demo Bypass
-        if (email === "admin@charmora.com" && password === "admin123") {
-            // Set a mock cookie for the middleware demo
-            document.cookie = "admin-auth=true; path=/";
-            toast.success("Identity Verified. Portal Access Granted.");
-            router.push("/admin");
-        } else {
-            toast.error("Access Denied. Credentials not recognized.");
+        try {
+            const res = await signIn("credentials", {
+                email,
+                password,
+                redirect: false,
+            });
+
+            if (res?.error) {
+                toast.error("Access Denied. Credentials not recognized.");
+            } else {
+                toast.success("Identity Verified. Portal Access Granted.");
+                router.push("/admin");
+                router.refresh();
+            }
+        } catch (error) {
+            toast.error("An error occurred during authentication.");
+        } finally {
+            setLoading(false);
         }
     };
 

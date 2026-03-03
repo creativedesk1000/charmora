@@ -1,12 +1,13 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { products } from "@/lib/data";
+import prisma from "@/lib/db";
 
-export default function Bestsellers() {
-    // Take the next 4 products as bestsellers (placeholder logic)
-    const bestsellers = products.slice(2, 6);
+export default async function Bestsellers() {
+    const bestsellers = await prisma.product.findMany({
+        where: { isBestseller: true, status: "ACTIVE" },
+        take: 4,
+        orderBy: { updatedAt: "desc" },
+    });
 
     return (
         <section className="py-16 md:py-24 px-6 md:px-12 bg-white">
@@ -31,15 +32,15 @@ export default function Bestsellers() {
                                     Bestseller
                                 </div>
                                 <Image
-                                    src={product.image}
-                                    alt={product.name}
+                                    src={product.image || "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=600&auto=format&fit=crop"}
+                                    alt={product.title}
                                     fill
                                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                                 />
                             </div>
                             <div className="space-y-1">
                                 <h3 className="text-sm md:text-base font-semibold text-charmora-purple leading-tight group-hover:text-charmora-pink-dark transition-colors duration-300">
-                                    {product.name}
+                                    {product.title}
                                 </h3>
                                 <p className="text-sm md:text-base text-[#C04800] font-medium">
                                     {product.price.toLocaleString()} PKR
@@ -61,4 +62,5 @@ export default function Bestsellers() {
         </section>
     );
 }
+
 

@@ -14,6 +14,9 @@ export async function createProduct(data: any) {
                 stock: parseInt(data.stock),
                 categoryId: data.categoryId,
                 image: data.image || "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1000",
+                isBestseller: !!data.isBestseller,
+                isNewArrival: !!data.isNewArrival,
+                isFeatured: !!data.isFeatured,
             }
         });
         revalidatePath("/admin/products");
@@ -35,6 +38,9 @@ export async function updateProduct(id: string, data: any) {
                 stock: parseInt(data.stock),
                 categoryId: data.categoryId,
                 image: data.image,
+                isBestseller: !!data.isBestseller,
+                isNewArrival: !!data.isNewArrival,
+                isFeatured: !!data.isFeatured,
             }
         });
         revalidatePath("/admin/products");
@@ -113,5 +119,53 @@ export async function toggleUserStatus(id: string, currentStatus: string) {
         return { success: true };
     } catch (error) {
         return { success: false };
+    }
+}
+// Order Actions
+export async function placeOrder(data: any) {
+    try {
+        const { items, ...customerInfo } = data;
+
+        const order = await prisma.$transaction(async (tx) => {
+            const newOrder = await tx.order.create({
+                data: {
+                    customerName: customerInfo.name,
+                    customerEmail: customerInfo.email,
+                    phone: customerInfo.phone,
+                    address: customerInfo.address,
+                    city: customerInfo.city,
+                    totalAmount: parseFloat(customerInfo.total),
+                    paymentMethod: "COD",
+                    status: "PENDING",
+                    items: {
+                        create: items.map((item: any) => ({
+                            productId: item.id,
+                            quantity: item.quantity,
+                            price: parseFloat(item.price),
+                        })),
+                    },
+                },
+            });
+
+            // Reduce stock
+            for (const item of items) {
+                await tx.product.update({
+                    where: { id: item.id },
+                    data: {
+                        stock: {
+                            decrement: item.quantity,
+                        },
+                    },
+                });
+            }
+
+            return newOrder;
+        });
+
+        revalidatePath("/admin/orders");
+        return { success: true, orderId: order.id };
+    } catch (error) {
+        console.error("Place Order Error:", error);
+        return { success: false, error: "Failed to process your order. Please try again." };
     }
 }

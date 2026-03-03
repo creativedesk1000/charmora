@@ -12,8 +12,11 @@ const navLinks = [
     { name: "Contact", href: "/contact" },
 ];
 
+import { useCart } from "@/context/CartContext";
+
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { totalItems } = useCart();
 
     return (
         <header className="w-full bg-white border-b border-charmora-pink/20">
@@ -70,9 +73,14 @@ export default function Header() {
                     <button className="text-charmora-purple hover:text-charmora-pink-dark transition-colors duration-300">
                         <Search size={20} strokeWidth={1.5} />
                     </button>
-                    <button className="text-charmora-purple hover:text-charmora-pink-dark transition-colors duration-300 relative">
+                    <Link href="/checkout" className="text-charmora-purple hover:text-charmora-pink-dark transition-colors duration-300 relative">
                         <ShoppingBag size={20} strokeWidth={1.5} />
-                    </button>
+                        {totalItems > 0 && (
+                            <span className="absolute -top-1 -right-1 bg-charmora-pink-dark text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                                {totalItems}
+                            </span>
+                        )}
+                    </Link>
                 </div>
             </div>
 

@@ -52,8 +52,8 @@ export default function OrdersClient({ initialOrders }: { initialOrders: any[] }
                         key={tab}
                         onClick={() => setActiveTab(tab)}
                         className={`px-6 py-3 rounded-2xl text-xs font-bold transition-all whitespace-nowrap ${activeTab === tab
-                                ? "bg-neutral-900 text-white shadow-xl"
-                                : "bg-white text-neutral-500 hover:text-neutral-900 border border-neutral-100"
+                            ? "bg-neutral-900 text-white shadow-xl"
+                            : "bg-white text-neutral-500 hover:text-neutral-900 border border-neutral-100"
                             }`}
                     >
                         {tab}
@@ -90,26 +90,41 @@ export default function OrdersClient({ initialOrders }: { initialOrders: any[] }
                                         </td>
                                         <td className="px-6 py-6 text-sm">
                                             <div className="flex flex-col">
-                                                <span className="font-serif font-bold text-neutral-900">{order.user?.name || "Guest"}</span>
-                                                <span className="text-[10px] text-neutral-400">{order.user?.email}</span>
+                                                <span className="font-serif font-bold text-neutral-900">{order.customerName}</span>
+                                                <span className="text-[10px] text-neutral-400">{order.customerEmail}</span>
+                                                <span className="text-[10px] text-neutral-400">{order.phone}</span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-6 text-xs font-bold text-neutral-500">
                                             {order.items?.length || 0} Pieces
                                         </td>
                                         <td className="px-6 py-6">
-                                            <div className={`flex items-center gap-1.5 text-[9px] font-bold px-3 py-1.5 rounded-xl border w-fit uppercase tracking-widest ${statusStyles[order.status as keyof typeof statusStyles]}`}>
-                                                {React.createElement(statusIcons[order.status as keyof typeof statusIcons], { size: 12 })}
-                                                {order.status}
-                                            </div>
+                                            <select
+                                                defaultValue={order.status}
+                                                onChange={async (e) => {
+                                                    const res = await fetch("/api/admin/orders/status", {
+                                                        method: "POST",
+                                                        body: JSON.stringify({ id: order.id, status: e.target.value })
+                                                    });
+                                                    if (res.ok) window.location.reload();
+                                                }}
+                                                className={`flex items-center gap-1.5 text-[9px] font-bold px-3 py-1.5 rounded-xl border w-fit uppercase tracking-widest outline-none ${statusStyles[order.status as keyof typeof statusStyles]}`}
+                                            >
+                                                {tabs.filter(t => t !== "All").map(t => (
+                                                    <option key={t} value={t}>{t}</option>
+                                                ))}
+                                            </select>
                                         </td>
                                         <td className="px-6 py-6 text-right font-serif font-black text-neutral-900">
                                             PKR {order.totalAmount.toLocaleString()}
                                         </td>
                                         <td className="px-8 py-6 text-center">
-                                            <button className="p-2.5 rounded-xl text-neutral-400 hover:text-neutral-900 hover:bg-white hover:shadow-md border border-transparent transition-all">
-                                                <Eye size={18} />
-                                            </button>
+                                            <div className="flex flex-col items-center">
+                                                <button className="p-2.5 rounded-xl text-neutral-400 hover:text-neutral-900 transition-all">
+                                                    <Eye size={18} />
+                                                </button>
+                                                <span className="text-[8px] text-neutral-400 mt-1 max-w-[100px] truncate">{order.address}</span>
+                                            </div>
                                         </td>
                                     </motion.tr>
                                 )) : (

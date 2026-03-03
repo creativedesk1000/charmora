@@ -20,6 +20,9 @@ export default function ProductForm({ onClose, onSuccess, product, categories }:
         stock: product?.stock || "",
         categoryId: product?.categoryId || (categories.length > 0 ? categories[0].id : ""),
         image: product?.image || "",
+        isBestseller: product?.isBestseller || false,
+        isNewArrival: product?.isNewArrival || false,
+        isFeatured: product?.isFeatured || false,
     });
 
     const handleSubmit = async (e: React.FormEvent) => {

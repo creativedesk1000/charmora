@@ -1,33 +1,80 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+import { PrismaClient } from "@prisma/client";
+const prismaSeed = new PrismaClient();
 
 async function main() {
-    // Create Categories
-    const categories = [
-        { name: "Necklaces", slug: "necklaces" },
-        { name: "Bracelets", slug: "bracelets" },
-        { name: "Artisan Pieces", slug: "artisan-pieces" },
-        { name: "Earrings", slug: "earrings" },
-    ];
-
-    for (const cat of categories) {
-        await prisma.category.upsert({
-            where: { slug: cat.slug },
-            update: {},
-            create: cat,
-        });
-    }
-
-    // Create Admin User
-    await prisma.user.upsert({
+    // 1. Create User
+    const admin = await prismaSeed.user.upsert({
         where: { email: "admin@charmora.com" },
         update: {},
         create: {
             email: "admin@charmora.com",
-            name: "Admin Master",
+            name: "Founder Cinderella",
+            password: "admin_secure_pass", // In real apps, use bcrypt to hash this
             role: "ADMIN",
         },
     });
+
+    // 2. Create Categories & Subcategories
+    const necklaceCat = await prismaSeed.category.upsert({
+        where: { slug: "necklaces" },
+        update: {},
+        create: { name: "Necklaces", slug: "necklaces" }
+    });
+
+    const braceletCat = await prismaSeed.category.upsert({
+        where: { slug: "bracelets" },
+        update: {},
+        create: { name: "Bracelets", slug: "bracelets" }
+    });
+
+    const earringCat = await prismaSeed.category.upsert({
+        where: { slug: "earrings" },
+        update: {},
+        create: { name: "Earrings", slug: "earrings" }
+    });
+
+    const sub1 = await prismaSeed.subCategory.upsert({
+        where: { slug: "pearl-necklaces" },
+        update: {},
+        create: { name: "Pearl Necklaces", slug: "pearl-necklaces", categoryId: necklaceCat.id }
+    });
+
+    // 3. Create Products
+    const products = [
+        {
+            title: "Moonlight Pearl Necklace",
+            description: "A cascade of iridescent freshwater pearls suspended from a delicate 18k gold chain.",
+            price: 45000,
+            stock: 10,
+            categoryId: necklaceCat.id,
+            subCategoryId: sub1.id,
+            image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1000",
+            isBestseller: true,
+            isNewArrival: true,
+        },
+        {
+            title: "Celestial Gold Bracelet",
+            description: "Intricately woven gold fibers create a light-catching lattice work.",
+            price: 32000,
+            stock: 15,
+            categoryId: braceletCat.id,
+            image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=1000",
+            isBestseller: true,
+        },
+        {
+            title: "Emerald Teardrop Earrings",
+            description: "Rare forest-green stones cut in a classic pear shape.",
+            price: 28000,
+            stock: 5,
+            categoryId: earringCat.id,
+            image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=1000",
+            isNewArrival: true,
+        }
+    ];
+
+    for (const p of products) {
+        await prismaSeed.product.create({ data: p });
+    }
 
     console.log("Seed completed successfully!");
 }
@@ -38,5 +85,5 @@ main()
         process.exit(1);
     })
     .finally(async () => {
-        await prisma.$disconnect();
+        await prismaSeed.$disconnect();
     });

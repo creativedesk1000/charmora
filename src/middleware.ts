@@ -1,22 +1,22 @@
+import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
-    const { pathname } = request.nextUrl;
+export default withAuth(
+    function middleware(req) {
+        const token = req.nextauth.token;
+        const isAdmin = token?.role === "ADMIN";
+        const isLoginPage = req.nextUrl.pathname === "/admin/login";
 
-    // Protect /admin routes
-    if (pathname.startsWith("/admin")) {
-        // Basic placeholder check for demo purposes
-        // In production, use next-auth getToken or session check
-        const isAdmin = request.cookies.get("admin-auth")?.value === "true";
-
-        if (!isAdmin && pathname !== "/admin/login") {
-            return NextResponse.redirect(new URL("/admin/login", request.url));
+        if (!isAdmin && !isLoginPage) {
+            return NextResponse.redirect(new URL("/admin/login", req.url));
         }
+    },
+    {
+        callbacks: {
+            authorized: ({ token }) => !!token,
+        },
     }
-
-    return NextResponse.next();
-}
+);
 
 export const config = {
     matcher: ["/admin/:path*"],

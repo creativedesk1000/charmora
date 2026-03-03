@@ -41,6 +41,7 @@ model Category {
   id            String         @id @default(cuid())
   name          String         @unique
   slug          String         @unique
+  image         String?
   subCategories SubCategory[]
   products      Product[]
   createdAt     DateTime       @default(now())
@@ -80,11 +81,17 @@ model Product {
 
 model Order {
   id            String      @id @default(cuid())
-  user          User        @relation(fields: [userId], references: [id])
-  userId        String
+  user          User?       @relation(fields: [userId], references: [id])
+  userId        String?
+  customerName  String
+  customerEmail String
+  phone         String
+  address       String
+  city          String
   totalAmount   Float
   status        OrderStatus @default(PENDING)
   paymentStatus String      @default("unpaid")
+  paymentMethod String      @default("COD")
   items         OrderItem[]
   payment       Payment?
   createdAt     DateTime    @default(now())

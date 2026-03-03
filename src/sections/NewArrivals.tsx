@@ -1,12 +1,13 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { products } from "@/lib/data";
+import prisma from "@/lib/db";
 
-export default function NewArrivals() {
-    // Take the first 4 products as new arrivals
-    const newArrivals = products.slice(0, 4);
+export default async function NewArrivals() {
+    const newArrivals = await prisma.product.findMany({
+        where: { isNewArrival: true, status: "ACTIVE" },
+        take: 4,
+        orderBy: { createdAt: "desc" },
+    });
 
     return (
         <section className="py-16 md:py-24 px-6 md:px-12 bg-white">
@@ -25,15 +26,15 @@ export default function NewArrivals() {
                         <Link key={product.id} href={`/shop/${product.id}`} className="group">
                             <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100 mb-4 shadow-sm border border-gray-100 group-hover:shadow-md transition-shadow duration-300">
                                 <Image
-                                    src={product.image}
-                                    alt={product.name}
+                                    src={product.image || "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=600&auto=format&fit=crop"}
+                                    alt={product.title}
                                     fill
                                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                                 />
                             </div>
                             <div className="space-y-1">
                                 <h3 className="text-sm md:text-base font-semibold text-charmora-purple leading-tight group-hover:text-charmora-pink-dark transition-colors duration-300">
-                                    {product.name}
+                                    {product.title}
                                 </h3>
                                 <p className="text-sm md:text-base text-[#C04800] font-medium">
                                     {product.price.toLocaleString()} PKR
@@ -46,4 +47,5 @@ export default function NewArrivals() {
         </section>
     );
 }
+
 
