@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 
 interface ProductCardProps {
     id: string;
+    slug: string;
     name: string;
     price: number;
     image: string;
@@ -15,7 +16,7 @@ interface ProductCardProps {
     isBestseller?: boolean;
 }
 
-export default function ProductCard({ id, name, price, image, category, className, isBestseller }: ProductCardProps) {
+export default function ProductCard({ id, slug, name, price, image, category, className, isBestseller }: ProductCardProps) {
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -24,7 +25,7 @@ export default function ProductCard({ id, name, price, image, category, classNam
             transition={{ duration: 0.5 }}
             className={cn("group relative", className)}
         >
-            <Link href={`/shop/${id}`} className="block">
+            <Link href={`/shop/${slug}`} className="block">
                 <div className="aspect-square overflow-hidden bg-white relative mb-5 rounded-2xl shadow-sm border border-charmora-purple/5">
                     <Image
                         src={image}
@@ -42,7 +43,7 @@ export default function ProductCard({ id, name, price, image, category, classNam
             </Link>
 
             <div className="space-y-1">
-                <Link href={`/shop/${id}`}>
+                <Link href={`/shop/${slug}`}>
                     <h3 className="text-xl font-serif text-charmora-purple group-hover:text-charmora-pink-dark transition-colors duration-300 font-semibold leading-tight">
                         {name}
                     </h3>

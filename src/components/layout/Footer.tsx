@@ -55,6 +55,7 @@ export default function Footer() {
                         <input
                             type="email"
                             placeholder="Your email address"
+                            suppressHydrationWarning
                             className="w-full bg-transparent border-b border-charmora-purple/20 pb-2 text-sm focus:border-charmora-pink-dark outline-none transition-colors font-sans pr-10"
                         />
                         <button type="submit" className="absolute right-0 bottom-2 text-charmora-pink-dark">
@@ -69,7 +70,7 @@ export default function Footer() {
                 <div className="flex gap-8">
                     <Link href="/privacy" className="hover:text-charmora-pink-dark transition-colors">Privacy</Link>
                     <Link href="/terms" className="hover:text-charmora-pink-dark transition-colors">Terms</Link>
-                    <Link href="/admin" className="hover:text-charmora-pink-dark transition-colors border-l border-charmora-pink/10 pl-8">Admin</Link>
+                    <Link href="/admin" className="px-4 py-2 bg-charmora-purple text-white rounded-full hover:bg-charmora-purple/90 transition-all font-sans text-[10px] tracking-widest">Admin Portal</Link>
                 </div>
             </div>
         </footer>

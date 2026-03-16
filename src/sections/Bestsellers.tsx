@@ -26,7 +26,7 @@ export default async function Bestsellers() {
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
                     {bestsellers.map((product) => (
-                        <Link key={product.id} href={`/shop/${product.id}`} className="group relative">
+                        <Link key={product.id} href={`/shop/${product.slug}`} className="group relative">
                             <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100 mb-4 shadow-sm border border-gray-100 group-hover:shadow-md transition-shadow duration-300">
                                 <div className="absolute top-2 left-2 z-10 px-2 py-1 bg-[#EE8E3B] text-white text-[10px] font-bold rounded-md flex items-center gap-1">
                                     Bestseller

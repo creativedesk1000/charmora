@@ -23,7 +23,7 @@ export default async function NewArrivals() {
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
                     {newArrivals.map((product) => (
-                        <Link key={product.id} href={`/shop/${product.id}`} className="group">
+                        <Link key={product.id} href={`/shop/${product.slug}`} className="group">
                             <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100 mb-4 shadow-sm border border-gray-100 group-hover:shadow-md transition-shadow duration-300">
                                 <Image
                                     src={product.image || "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=600&auto=format&fit=crop"}

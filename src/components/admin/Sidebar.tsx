@@ -21,6 +21,7 @@ const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
     { icon: Package, label: "Products", href: "/admin/products" },
     { icon: Layers, label: "Categories", href: "/admin/categories" },
+    { icon: Package, label: "Inventory", href: "/admin/inventory" },
     { icon: ShoppingCart, label: "Orders", href: "/admin/orders" },
     { icon: Users, label: "Users", href: "/admin/users" },
 ];

@@ -6,9 +6,11 @@ import { revalidatePath } from "next/cache";
 // Product Actions
 export async function createProduct(data: any) {
     try {
+        const slug = data.slug || data.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
         const product = await prisma.product.create({
             data: {
                 title: data.name,
+                slug: slug,
                 description: data.description,
                 price: parseFloat(data.price),
                 stock: parseInt(data.stock),
@@ -20,6 +22,7 @@ export async function createProduct(data: any) {
             }
         });
         revalidatePath("/admin/products");
+        revalidatePath("/shop");
         return { success: true, product };
     } catch (error) {
         console.error("Create Product Error:", error);
@@ -29,10 +32,12 @@ export async function createProduct(data: any) {
 
 export async function updateProduct(id: string, data: any) {
     try {
+        const slug = data.slug || data.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
         const product = await prisma.product.update({
             where: { id },
             data: {
                 title: data.name,
+                slug: slug,
                 description: data.description,
                 price: parseFloat(data.price),
                 stock: parseInt(data.stock),
@@ -44,6 +49,8 @@ export async function updateProduct(id: string, data: any) {
             }
         });
         revalidatePath("/admin/products");
+        revalidatePath("/shop");
+        revalidatePath(`/shop/${slug}`);
         return { success: true, product };
     } catch (error) {
         console.error("Update Product Error:", error);

@@ -7,11 +7,11 @@ import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
 import ProductClient from "./ProductClient"; // We'll create this for interaction
 
-export default async function ProductDetail({ params }: { params: { slug: string } }) {
-    const { slug } = params;
+export default async function ProductDetail({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
 
     const product = await prisma.product.findUnique({
-        where: { id: slug },
+        where: { slug: slug },
         include: { category: true }
     });
 
@@ -25,6 +25,7 @@ export default async function ProductDetail({ params }: { params: { slug: string
             id: { not: product.id },
             status: "ACTIVE"
         },
+        include: { category: true },
         take: 4
     });
 
@@ -69,7 +70,7 @@ export default async function ProductDetail({ params }: { params: { slug: string
                                 title={product.title}
                                 price={product.price}
                                 description={product.description}
-                                image={product.image || ""}
+                                image={product.image || "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1000"}
                             />
 
                         </div>
@@ -83,10 +84,11 @@ export default async function ProductDetail({ params }: { params: { slug: string
                                 <ProductCard
                                     key={p.id}
                                     id={p.id}
+                                    slug={p.slug}
                                     name={p.title}
                                     price={p.price}
                                     image={p.image || ""}
-                                    category={product.category.name}
+                                    category={p.category.name}
                                 />
                             ))}
                         </div>

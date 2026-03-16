@@ -39,10 +39,15 @@ async function main() {
         create: { name: "Pearl Necklaces", slug: "pearl-necklaces", categoryId: necklaceCat.id }
     });
 
-    // 3. Create Products
+    // 3. Clear Existing Data (Optional but helpful for clean seed)
+    await prismaSeed.orderItem.deleteMany();
+    await prismaSeed.product.deleteMany();
+
+    // 4. Create Products
     const products = [
         {
             title: "Moonlight Pearl Necklace",
+            slug: "moonlight-pearl-necklace",
             description: "A cascade of iridescent freshwater pearls suspended from a delicate 18k gold chain.",
             price: 45000,
             stock: 10,
@@ -54,6 +59,7 @@ async function main() {
         },
         {
             title: "Celestial Gold Bracelet",
+            slug: "celestial-gold-bracelet",
             description: "Intricately woven gold fibers create a light-catching lattice work.",
             price: 32000,
             stock: 15,
@@ -63,6 +69,7 @@ async function main() {
         },
         {
             title: "Emerald Teardrop Earrings",
+            slug: "emerald-teardrop-earrings",
             description: "Rare forest-green stones cut in a classic pear shape.",
             price: 28000,
             stock: 5,
