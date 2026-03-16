@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import AppLayout from "@/components/layout";
 import Hero from "@/sections/Hero";
 import ShopByCategory from "@/sections/ShopByCategory";

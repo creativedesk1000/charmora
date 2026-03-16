@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import AppLayout from "@/components/layout";
 import { CheckCircle } from "lucide-react";

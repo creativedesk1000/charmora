@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import AppLayout from "@/components/layout";
 import prisma from "@/lib/db";
 import { Suspense } from "react";
