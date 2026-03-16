@@ -3,11 +3,12 @@ import prisma from "@/lib/db";
 
 export async function GET(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params;
     try {
         const product = await prisma.product.findUnique({
-            where: { id: params.id },
+            where: { id },
             include: { category: true },
         });
 
@@ -23,13 +24,14 @@ export async function GET(
 
 export async function PATCH(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params;
     try {
         const body = await req.json();
 
         const product = await prisma.product.update({
-            where: { id: params.id },
+            where: { id },
             data: body,
         });
 
@@ -41,11 +43,12 @@ export async function PATCH(
 
 export async function DELETE(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params;
     try {
         await prisma.product.delete({
-            where: { id: params.id },
+            where: { id },
         });
 
         return NextResponse.json({ message: "Product deleted successfully" });
