@@ -11,25 +11,33 @@ import ProductClient from "./ProductClient"; // We'll create this for interactio
 
 export default async function ProductDetail({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
+    let product: any = null;
+    let relatedProducts: any[] = [];
 
-    const product = await prisma.product.findUnique({
-        where: { slug: slug },
-        include: { category: true }
-    });
+    try {
+        product = await prisma.product.findUnique({
+            where: { slug: slug },
+            include: { category: true }
+        });
+
+        if (product) {
+            relatedProducts = await prisma.product.findMany({
+                where: {
+                    categoryId: product.categoryId,
+                    id: { not: product.id },
+                    status: "ACTIVE"
+                },
+                include: { category: true },
+                take: 4
+            });
+        }
+    } catch (error) {
+        console.error("Failed to fetch product detail:", error);
+    }
 
     if (!product) {
         notFound();
     }
-
-    const relatedProducts = await prisma.product.findMany({
-        where: {
-            categoryId: product.categoryId,
-            id: { not: product.id },
-            status: "ACTIVE"
-        },
-        include: { category: true },
-        take: 4
-    });
 
     return (
         <AppLayout>

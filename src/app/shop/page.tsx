@@ -6,15 +6,22 @@ import { Suspense } from "react";
 import ShopClient from "./ShopClient";
 
 export default async function ShopPage() {
-    const products = await prisma.product.findMany({
-        where: { status: "ACTIVE" },
-        include: { category: true },
-        orderBy: { createdAt: "desc" }
-    });
+    let products: any[] = [];
+    let categories: any[] = [];
 
-    const categories = await prisma.category.findMany({
-        orderBy: { name: "asc" }
-    });
+    try {
+        products = await prisma.product.findMany({
+            where: { status: "ACTIVE" },
+            include: { category: true },
+            orderBy: { createdAt: "desc" }
+        });
+
+        categories = await prisma.category.findMany({
+            orderBy: { name: "asc" }
+        });
+    } catch (error) {
+        console.error("Failed to fetch shop data:", error);
+    }
 
     return (
         <AppLayout>
