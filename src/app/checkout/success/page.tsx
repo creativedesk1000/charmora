@@ -2,7 +2,8 @@ import Link from "next/link";
 import AppLayout from "@/components/layout";
 import { CheckCircle } from "lucide-react";
 
-export default function OrderSuccessPage({ searchParams }: { searchParams: { id: string } }) {
+export default async function OrderSuccessPage({ searchParams }: { searchParams: Promise<{ id: string }> }) {
+    const { id } = await searchParams;
     return (
         <AppLayout>
             <div className="pt-40 pb-24 px-6 text-center min-h-screen">
@@ -14,7 +15,7 @@ export default function OrderSuccessPage({ searchParams }: { searchParams: { id:
                     </div>
                     <h1 className="text-3xl font-serif text-charmora-purple mb-4">Order Received!</h1>
                     <p className="text-sm text-charmora-purple/60 mb-8 leading-relaxed">
-                        Thank you for choosing Cinderella's Charmora. Your order <span className="font-bold text-charmora-purple">#{searchParams.id?.slice(-8).toUpperCase()}</span> has been received and is being prepared with care.
+                        Thank you for choosing Cinderella's Charmora. Your order <span className="font-bold text-charmora-purple">#{id?.slice(-8).toUpperCase()}</span> has been received and is being prepared with care.
                     </p>
                     <div className="space-y-4">
                         <Link href="/shop" className="block w-full py-4 bg-charmora-purple text-white rounded-2xl font-bold tracking-widest hover:bg-charmora-purple/90 transition-colors">

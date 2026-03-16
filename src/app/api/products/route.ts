@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { slugify } from "@/lib/utils";
 
 // GET all products
 export async function GET() {
@@ -26,8 +27,11 @@ export async function POST(req: Request) {
                 description,
                 price: parseFloat(price),
                 stock: parseInt(stock),
-                categoryId,
                 image,
+                slug: `${slugify(title)}-${Date.now()}`,
+                category: {
+                    connect: { id: categoryId }
+                }
             },
         });
 

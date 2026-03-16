@@ -1,6 +1,7 @@
 export const products = [
     {
         id: "moonlight-pearl-necklace",
+        slug: "moonlight-pearl-necklace",
         name: "Moonlight Pearl Necklace",
         price: 45000,
         category: "Necklaces",
@@ -10,6 +11,7 @@ export const products = [
     },
     {
         id: "celestial-bracelet",
+        slug: "celestial-gold-bracelet",
         name: "Celestial Gold Bracelet",
         price: 32000,
         category: "Bracelets",
@@ -19,6 +21,7 @@ export const products = [
     },
     {
         id: "floral-gajra-artisan",
+        slug: "floral-artisan-gajra",
         name: "Floral Artisan Gajra",
         price: 18000,
         category: "Artisan Pieces",
@@ -28,6 +31,7 @@ export const products = [
     },
     {
         id: "emerald-teardrop-earrings",
+        slug: "emerald-teardrop-earrings",
         name: "Emerald Teardrop Earrings",
         price: 28000,
         category: "Earrings",
@@ -37,6 +41,7 @@ export const products = [
     },
     {
         id: "aura-silk-pendant",
+        slug: "aura-silk-pendant",
         name: "Aura Silk Pendant",
         price: 22000,
         category: "Necklaces",
@@ -46,6 +51,7 @@ export const products = [
     },
     {
         id: "velvet-rose-choker",
+        slug: "velvet-rose-choker",
         name: "Velvet Rose Choker",
         price: 15500,
         category: "Artisan Pieces",
