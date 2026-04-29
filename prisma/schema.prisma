@@ -3,18 +3,34 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// enums are not supported in SQLite, using Strings instead
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum ProductStatus {
+  ACTIVE
+  INACTIVE
+}
 
 model User {
   id        String   @id @default(cuid())
   name      String?
   email     String   @unique
   password  String
-  role      String   @default("USER")
+  role      Role     @default(USER)
   active    Boolean  @default(true)
   orders    Order[]
   createdAt DateTime @default(now())
@@ -51,7 +67,7 @@ model Product {
   price         Float
   stock         Int           @default(0)
   image         String?
-  status        String @default("ACTIVE")
+  status        ProductStatus @default(ACTIVE)
   isBestseller  Boolean       @default(false)
   isNewArrival  Boolean       @default(false)
   isFeatured    Boolean       @default(false)
@@ -74,7 +90,7 @@ model Order {
   address       String
   city          String
   totalAmount   Float
-  status        String @default("PENDING")
+  status        OrderStatus @default(PENDING)
   paymentStatus String      @default("unpaid")
   paymentMethod String      @default("COD")
   items         OrderItem[]
