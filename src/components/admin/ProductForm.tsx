@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import { X, Save, Loader2, Upload } from "lucide-react";
 import { motion } from "framer-motion";
-import { createProduct, updateProduct } from "@/lib/actions";
+import { createProduct, updateProduct, uploadProductImage } from "@/lib/actions";
 import { toast } from "sonner";
-import { supabase } from "@/lib/supabase";
+// import { supabase } from "@/lib/supabase"; // Not needed on client anymore for upload
 
 interface ProductFormProps {
     onClose: () => void;
@@ -35,21 +35,15 @@ export default function ProductForm({ onClose, onSuccess, product, categories }:
 
         try {
             setUploading(true);
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
-            const filePath = `${fileName}`;
+            
+            const formData = new FormData();
+            formData.append("file", file);
 
-            const { error: uploadError } = await supabase.storage
-                .from('products')
-                .upload(filePath, file);
+            const res = await uploadProductImage(formData);
 
-            if (uploadError) throw uploadError;
+            if (!res.success) throw new Error(res.error);
 
-            const { data: { publicUrl } } = supabase.storage
-                .from('products')
-                .getPublicUrl(filePath);
-
-            setFormData(prev => ({ ...prev, image: publicUrl }));
+            setFormData(prev => ({ ...prev, image: res.url }));
             toast.success("Image uploaded successfully.");
         } catch (error: any) {
             toast.error(error.message || "Error uploading image");

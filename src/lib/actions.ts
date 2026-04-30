@@ -2,8 +2,42 @@
 
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { supabase } from "@/lib/supabase";
 
 // Product Actions
+export async function uploadProductImage(formData: FormData) {
+    try {
+        const file = formData.get("file") as File;
+        if (!file) throw new Error("No file provided");
+
+        const fileExt = file.name.split(".").pop();
+        const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        // Convert File to ArrayBuffer for Supabase upload on server
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+
+        const { error: uploadError } = await supabase.storage
+            .from("products")
+            .upload(filePath, buffer, {
+                contentType: file.type,
+                upsert: true,
+            });
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+            .from("products")
+            .getPublicUrl(filePath);
+
+        return { success: true, url: publicUrl };
+    } catch (error: any) {
+        console.error("Upload Image Error:", error);
+        return { success: false, error: error.message || "Failed to upload image." };
+    }
+}
+
 export async function createProduct(data: any) {
     try {
         const slug = data.slug || data.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
