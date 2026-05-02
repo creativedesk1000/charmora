@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://charmora.vercel.app/sitemap.xml
