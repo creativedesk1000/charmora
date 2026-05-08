@@ -93,6 +93,9 @@ model Order {
   status        OrderStatus @default(PENDING)
   paymentStatus String      @default("unpaid")
   paymentMethod String      @default("COD")
+  courierName   String?
+  trackingId    String?
+  statusNote    String?
   items         OrderItem[]
   payment       Payment?
   createdAt     DateTime    @default(now())

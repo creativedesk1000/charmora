@@ -100,7 +100,7 @@ export default function ShopClient({ products, categories }: ShopClientProps) {
                 </div>
 
                 {/* Grid */}
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-10 md:gap-x-12 md:gap-y-24">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-12 md:gap-x-6 md:gap-y-16 lg:gap-x-8 lg:gap-y-20">
                     {filteredProducts.map((product) => (
                         <ProductCard
                             key={product.id}

@@ -38,6 +38,34 @@ export async function uploadProductImage(formData: FormData) {
     }
 }
 
+// Category image upload
+export async function uploadCategoryImage(formData: FormData) {
+    try {
+        const file = formData.get("file") as File;
+        if (!file) throw new Error("No file provided");
+        const fileExt = file.name.split(".").pop();
+        const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+        const filePath = `categories/${fileName}`; // Use a subfolder in the products bucket
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+        const { error: uploadError } = await supabase.storage
+            .from("products") // Use the existing 'products' bucket
+            .upload(filePath, buffer, {
+                contentType: file.type,
+                upsert: true,
+            });
+        if (uploadError) throw uploadError;
+        const { data: { publicUrl } } = supabase.storage
+            .from("products")
+            .getPublicUrl(filePath);
+        return { success: true, url: publicUrl };
+    } catch (error: any) {
+        console.error("Upload Category Image Error:", error);
+        return { success: false, error: error.message || "Failed to upload category image." };
+    }
+}
+
+// Product Actions continued...
 export async function createProduct(data: any) {
     try {
         const slug = data.slug || data.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
@@ -208,5 +236,42 @@ export async function placeOrder(data: any) {
     } catch (error) {
         console.error("Place Order Error:", error);
         return { success: false, error: "Failed to process your order. Please try again." };
+    }
+}
+
+export async function updateOrder(id: string, data: any) {
+    try {
+        console.log("Updating order intelligence:", id, data);
+        const updated = await prisma.order.update({
+            where: { id },
+            data
+        });
+        console.log("Order intelligence updated successfully:", updated.id);
+        revalidatePath("/admin/orders");
+        return { success: true };
+    } catch (error: any) {
+        console.error("Update Order Error Details:", error);
+        return { 
+            success: false, 
+            error: error.message || "Failed to update order status." 
+        };
+    }
+}
+  
+export async function getOrder(id: string) {  
+    try {  
+        const order = await prisma.order.findUnique({  
+            where: { id },  
+            include: {  
+                items: {  
+                    include: {  
+                        product: true  
+                    }  
+                }  
+            }  
+        });  
+        return { success: true, order };  
+    } catch (error) {
+        return { success: false, error: "Order not found." };
     }
 }

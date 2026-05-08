@@ -17,10 +17,17 @@ export default async function OrderSuccessPage({ searchParams }: { searchParams:
                     </div>
                     <h1 className="text-3xl font-serif text-charmora-purple mb-4">Order Received!</h1>
                     <p className="text-sm text-charmora-purple/60 mb-8 leading-relaxed">
-                        Thank you for choosing Cinderella's Charmora. Your order <span className="font-bold text-charmora-purple">#{id?.slice(-8).toUpperCase()}</span> has been received and is being prepared with care.
+                        Thank you for choosing Cinderella's Charmora. Your order reference is:
+                        <br />
+                        <span className="font-mono font-bold text-charmora-purple text-lg mt-2 inline-block bg-neutral-50 px-4 py-2 rounded-xl border border-neutral-100 select-all">{id}</span>
+                        <br />
+                        <span className="text-[10px] block mt-2 opacity-60">Please save this ID to track your shipment.</span>
                     </p>
                     <div className="space-y-4">
-                        <Link href="/shop" className="block w-full py-4 bg-charmora-purple text-white rounded-2xl font-bold tracking-widest hover:bg-charmora-purple/90 transition-colors">
+                        <Link href={`/track?id=${id}`} className="block w-full py-4 bg-charmora-purple text-white rounded-2xl font-bold tracking-widest hover:bg-charmora-purple/90 transition-colors shadow-lg">
+                            Track Shipment
+                        </Link>
+                        <Link href="/shop" className="block w-full py-4 bg-neutral-50 text-charmora-purple rounded-2xl font-bold tracking-widest hover:bg-neutral-100 transition-colors border border-neutral-100">
                             Continue Shopping
                         </Link>
                         <p className="text-[10px] uppercase tracking-widest text-charmora-purple/40">

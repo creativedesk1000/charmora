@@ -9,21 +9,46 @@ import {
     FolderOpen
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { createCategory, deleteCategory as deleteCategoryAction } from "@/lib/actions";
+import { createCategory, deleteCategory as deleteCategoryAction, updateCategory, uploadCategoryImage } from "@/lib/actions";
 import { toast } from "sonner";
 import ConfirmModal from "@/components/admin/ConfirmModal";
+import { X } from "lucide-react";
 
 export default function CategoriesClient({ initialCategories }: { initialCategories: any[] }) {
     const [categories, setCategories] = useState(initialCategories);
     const [searchTerm, setSearchTerm] = useState("");
-    const [newCat, setNewCat] = useState({ name: "", slug: "" });
+    const [newCat, setNewCat] = useState({ name: "", slug: "", image: "" });
+    const [editingCat, setEditingCat] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<any>(null);
+    const [uploading, setUploading] = useState(false);
 
     const filteredCategories = categories.filter(c =>
         c.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, isEditing = false) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setUploading(true);
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const res = await uploadCategoryImage(formData);
+        if (res.success && res.url) {
+            if (isEditing) {
+                setEditingCat({ ...editingCat, image: res.url });
+            } else {
+                setNewCat({ ...newCat, image: res.url });
+            }
+            toast.success("Image uploaded successfully");
+        } else {
+            toast.error(res.error || "Upload failed");
+        }
+        setUploading(false);
+    };
 
     const handleDelete = async () => {
         if (!selectedCategory) return;
@@ -45,7 +70,26 @@ export default function CategoriesClient({ initialCategories }: { initialCategor
         if (res.success) {
             toast.success("Collection sealed and cataloged.");
             setCategories([...categories, { ...res.category, _count: { products: 0 } }]);
-            setNewCat({ name: "", slug: "" });
+            setNewCat({ name: "", slug: "", image: "" });
+        } else {
+            toast.error(res.error);
+        }
+        setLoading(false);
+    };
+
+    const handleUpdate = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!editingCat.name || !editingCat.slug) return;
+        setLoading(true);
+        const res = await updateCategory(editingCat.id, {
+            name: editingCat.name,
+            slug: editingCat.slug,
+            image: editingCat.image
+        });
+        if (res.success) {
+            toast.success("Collection updated successfully.");
+            setCategories(categories.map(c => c.id === editingCat.id ? { ...c, ...editingCat } : c));
+            setEditingCat(null);
         } else {
             toast.error(res.error);
         }
@@ -81,6 +125,7 @@ export default function CategoriesClient({ initialCategories }: { initialCategor
                         <table className="w-full text-left">
                             <thead>
                                 <tr className="bg-neutral-50/50 text-neutral-400 text-[10px] uppercase font-bold tracking-widest border-b border-neutral-100">
+                                    <th className="px-8 py-5">Image</th>
                                     <th className="px-8 py-5">Collection Name</th>
                                     <th className="px-6 py-5">Slug</th>
                                     <th className="px-6 py-5">Pieces</th>
@@ -98,12 +143,16 @@ export default function CategoriesClient({ initialCategories }: { initialCategor
                                             className="group hover:bg-neutral-50/50 transition-colors"
                                         >
                                             <td className="px-8 py-5">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-8 h-8 rounded-lg bg-charmora-pink text-charmora-purple flex items-center justify-center font-bold text-xs shadow-sm">
-                                                        {category.name.charAt(0)}
+                                                {category.image ? (
+                                                    <img src={category.image} alt={category.name} className="w-12 h-12 rounded-lg object-cover border border-neutral-100" />
+                                                ) : (
+                                                    <div className="w-12 h-12 rounded-lg bg-neutral-100 text-neutral-400 flex items-center justify-center text-xs">
+                                                        No Image
                                                     </div>
-                                                    <span className="font-serif font-bold text-neutral-900">{category.name}</span>
-                                                </div>
+                                                )}
+                                            </td>
+                                            <td className="px-8 py-5">
+                                                <span className="font-serif font-bold text-neutral-900">{category.name}</span>
                                             </td>
                                             <td className="px-6 py-5">
                                                 <span className="font-mono text-[10px] text-neutral-400 uppercase tracking-tighter">/{category.slug}</span>
@@ -116,7 +165,10 @@ export default function CategoriesClient({ initialCategories }: { initialCategor
                                             </td>
                                             <td className="px-8 py-5 text-center">
                                                 <div className="flex items-center justify-center gap-2">
-                                                    <button className="p-2 rounded-lg text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100 transition-all active:scale-90">
+                                                    <button 
+                                                        onClick={() => setEditingCat(category)}
+                                                        className="p-2 rounded-lg text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100 transition-all active:scale-90"
+                                                    >
                                                         <Edit2 size={16} />
                                                     </button>
                                                     <button
@@ -135,18 +187,70 @@ export default function CategoriesClient({ initialCategories }: { initialCategor
                     </div>
                 </div>
 
-                {/* Create Form */}
+                {/* Forms Section */}
                 <div className="space-y-6">
+                    {/* Create / Edit Form */}
                     <div className="bg-white rounded-[2rem] p-8 border border-neutral-100 shadow-xl">
-                        <h3 className="font-serif font-bold text-xl mb-6 text-neutral-900 border-b border-neutral-50 pb-4">Instant Category</h3>
-                        <form className="space-y-5" onSubmit={handleCreate}>
+                        <div className="flex items-center justify-between mb-6 border-b border-neutral-50 pb-4">
+                            <h3 className="font-serif font-bold text-xl text-neutral-900">
+                                {editingCat ? "Edit Collection" : "Instant Category"}
+                            </h3>
+                            {editingCat && (
+                                <button 
+                                    onClick={() => setEditingCat(null)}
+                                    className="p-2 hover:bg-neutral-100 rounded-full text-neutral-400 transition-colors"
+                                >
+                                    <X size={18} />
+                                </button>
+                            )}
+                        </div>
+                        
+                        <form className="space-y-5" onSubmit={editingCat ? handleUpdate : handleCreate}>
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase font-bold text-neutral-400 tracking-widest pl-1">Category Image</label>
+                                <div className="flex items-center gap-4">
+                                    <div className="w-20 h-20 rounded-2xl bg-neutral-50 border-2 border-dashed border-neutral-200 flex items-center justify-center overflow-hidden relative group">
+                                        {(editingCat?.image || newCat.image) ? (
+                                            <>
+                                                <img 
+                                                    src={editingCat ? editingCat.image : newCat.image} 
+                                                    alt="Preview" 
+                                                    className="w-full h-full object-cover"
+                                                />
+                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                    <Plus className="text-white rotate-45" size={20} />
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <Plus className="text-neutral-300" size={24} />
+                                        )}
+                                        <input 
+                                            type="file" 
+                                            className="absolute inset-0 opacity-0 cursor-pointer"
+                                            onChange={(e) => handleImageUpload(e, !!editingCat)}
+                                            accept="image/*"
+                                        />
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-[10px] text-neutral-400 font-medium">Click to upload collection cover</p>
+                                        <p className="text-[9px] text-neutral-300 mt-1">Recommended: 800x800px</p>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div className="space-y-2">
                                 <label className="text-[10px] uppercase font-bold text-neutral-400 tracking-widest pl-1">Category Name</label>
                                 <input
                                     type="text"
                                     required
-                                    value={newCat.name}
-                                    onChange={(e) => setNewCat({ ...newCat, name: e.target.value, slug: e.target.value.toLowerCase().replace(/ /g, '-') })}
+                                    value={editingCat ? editingCat.name : newCat.name}
+                                    onChange={(e) => {
+                                        if (editingCat) {
+                                            setEditingCat({ ...editingCat, name: e.target.value, slug: e.target.value.toLowerCase().replace(/ /g, '-') });
+                                        } else {
+                                            setNewCat({ ...newCat, name: e.target.value, slug: e.target.value.toLowerCase().replace(/ /g, '-') });
+                                        }
+                                    }}
                                     className="w-full bg-neutral-50 border border-transparent focus:border-neutral-200 focus:bg-white outline-none rounded-2xl p-4 text-sm font-sans transition-all"
                                     placeholder="e.g. Diamond Collection"
                                 />
@@ -156,17 +260,23 @@ export default function CategoriesClient({ initialCategories }: { initialCategor
                                 <input
                                     type="text"
                                     required
-                                    value={newCat.slug}
-                                    onChange={(e) => setNewCat({ ...newCat, slug: e.target.value })}
+                                    value={editingCat ? editingCat.slug : newCat.slug}
+                                    onChange={(e) => {
+                                        if (editingCat) {
+                                            setEditingCat({ ...editingCat, slug: e.target.value });
+                                        } else {
+                                            setNewCat({ ...newCat, slug: e.target.value });
+                                        }
+                                    }}
                                     className="w-full bg-neutral-50 border border-transparent focus:border-neutral-200 focus:bg-white outline-none rounded-2xl p-4 text-sm font-mono transition-all text-neutral-500"
                                     placeholder="diamond-collection"
                                 />
                             </div>
                             <button
-                                disabled={loading}
+                                disabled={loading || uploading}
                                 className="w-full bg-charmora-pink text-charmora-purple py-4 rounded-2xl font-bold text-sm shadow-lg shadow-pink-100 hover:scale-102 transition-all active:scale-98 mt-4 uppercase tracking-widest disabled:opacity-50"
                             >
-                                {loading ? "Sealing..." : "Seal Collection"}
+                                {loading ? "Saving..." : (editingCat ? "Update Collection" : "Seal Collection")}
                             </button>
                         </form>
                     </div>

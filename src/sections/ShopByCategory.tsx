@@ -34,15 +34,44 @@ export default async function ShopByCategory() {
                         <Link
                             key={category.id}
                             href={`/shop?category=${category.slug}`}
-                            className="group relative h-48 md:h-64 rounded-3xl overflow-hidden bg-white/50 backdrop-blur-sm border border-charmora-pink-dark/5 p-6 flex flex-col justify-between hover:bg-white hover:shadow-xl hover:shadow-charmora-pink-dark/5 transition-all duration-500"
+                            className="group relative h-40 md:h-56 rounded-3xl overflow-hidden bg-white/50 backdrop-blur-sm border border-charmora-pink-dark/5 p-6 flex flex-col justify-between hover:bg-white hover:shadow-xl hover:shadow-charmora-pink-dark/5 transition-all duration-500"
                         >
-                            <div className="text-[10px] font-sans font-bold text-charmora-purple/40 uppercase tracking-widest">
-                                {category._count.products} Pieces
+                            <div className="flex flex-col h-full justify-between relative z-10">
+                                <div className="flex flex-col gap-3">
+                                    <div className="text-[10px] font-sans font-bold text-charmora-purple/40 uppercase tracking-widest">
+                                        {category._count.products} Pieces
+                                    </div>
+                                    <div className="w-12 h-12 rounded-xl overflow-hidden border border-charmora-pink-dark/10 shadow-sm">
+                                        {category.image ? (
+                                            <img 
+                                                src={category.image} 
+                                                alt={category.name} 
+                                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-charmora-pink/20 text-charmora-purple flex items-center justify-center font-bold text-xs">
+                                                {category.name.charAt(0)}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 className="text-xl text-charmora-purple font-serif mb-2">{category.name}</h3>
+                                    <div className="w-8 h-[1px] bg-charmora-pink-dark/30 group-hover:w-full transition-all duration-700" />
+                                </div>
                             </div>
-                            <div>
-                                <h3 className="text-xl text-charmora-purple font-serif mb-2">{category.name}</h3>
-                                <div className="w-8 h-[1px] bg-charmora-pink-dark/30 group-hover:w-full transition-all duration-700" />
-                            </div>
+                            
+                            {/* Subtle Background Accent */}
+                            {category.image && (
+                                <div 
+                                    className="absolute inset-0 opacity-[0.03] grayscale transition-opacity group-hover:opacity-[0.07]"
+                                    style={{ 
+                                        backgroundImage: `url(${category.image})`,
+                                        backgroundSize: 'cover',
+                                        backgroundPosition: 'center'
+                                    }}
+                                />
+                            )}
                         </Link>
                     ))}
                 </div>
