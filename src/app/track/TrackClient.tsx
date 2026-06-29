@@ -148,7 +148,7 @@ export default function TrackClient() {
                                 </div>
 
                                 {order.statusNote && (
-                                    <motion.div 
+                                    <motion.div
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         className="mt-12 p-4 bg-charmora-pink/10 border border-charmora-pink-dark/10 rounded-2xl"
@@ -202,7 +202,7 @@ export default function TrackClient() {
                                         </div>
                                     ) : (
                                         <div className="py-6 text-center">
-                                            <p className="text-sm italic text-neutral-400">Logistics assignment in progress.</p>
+                                            <p className="text-sm italic text-neutral-400">Your Order is in progress.</p>
                                         </div>
                                     )}
                                 </motion.div>

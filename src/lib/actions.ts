@@ -122,14 +122,21 @@ export async function updateProduct(id: string, data: any) {
 
 export async function deleteProduct(id: string) {
     try {
-        await prisma.product.delete({ where: { id } });
+        // Soft-delete / archive to avoid FK constraint violations (OrderItem -> Product)
+        await prisma.product.update({
+            where: { id },
+            data: { status: "INACTIVE" },
+        });
+
         revalidatePath("/admin/products");
+        revalidatePath("/shop");
         return { success: true };
     } catch (error) {
         console.error("Delete Product Error:", error);
         return { success: false, error: "Archival failed." };
     }
 }
+
 
 // Category Actions
 export async function createCategory(data: any) {
