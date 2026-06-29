@@ -5,6 +5,7 @@ import ProductsClient from "@/app/admin/products/ProductsClient";
 
 export default async function ProductsPage() {
     const products = await prisma.product.findMany({
+        where: { status: "ACTIVE" },
         include: { category: true },
         orderBy: { createdAt: "desc" },
     });

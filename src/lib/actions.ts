@@ -123,6 +123,7 @@ export async function updateProduct(id: string, data: any) {
 export async function deleteProduct(id: string) {
     try {
         // Soft-delete / archive to avoid FK constraint violations (OrderItem -> Product)
+        // Also makes sure admin list + shop list exclude it after refresh.
         await prisma.product.update({
             where: { id },
             data: { status: "INACTIVE" },
