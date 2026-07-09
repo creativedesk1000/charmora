@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Instagram, Facebook, Twitter, Mail } from "lucide-react";
+import Image from "next/image";
+import logo from "@/app/logo.png";
 
 export default function Footer() {
     const currentYear = new Date().getFullYear();
@@ -9,9 +11,12 @@ export default function Footer() {
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
                 {/* Brand Column */}
                 <div className="col-span-1 md:col-span-1">
-                    <Link href="/" className="inline-flex flex-col items-start mb-8">
-                        <span className="text-3xl font-serif text-charmora-purple font-bold">Cinderella's</span>
-                        <span className="text-[10px] uppercase tracking-[0.4em] -mt-1 text-charmora-pink-dark font-sans font-bold">Charmora</span>
+                    <Link href="/" className="inline-flex items-center gap-3 mb-8 transition-transform hover:scale-105">
+                        <Image src={logo} alt="Cinderella's Charmora Logo" width={50} height={50} className="h-12 w-auto object-contain" />
+                        <div className="flex flex-col items-start">
+                            <span className="text-3xl font-serif text-charmora-purple font-bold">Cinderella's</span>
+                            <span className="text-[10px] uppercase tracking-[0.4em] -mt-1 text-charmora-pink-dark font-sans font-bold">Charmora</span>
+                        </div>
                     </Link>
                     <p className="text-sm text-charmora-purple/70 leading-relaxed font-sans max-w-xs">
                         Crafted with Love 💗.

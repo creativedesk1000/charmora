@@ -5,6 +5,8 @@ import Link from "next/link";
 import { ShoppingBag, Menu, X, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import logo from "@/app/logo.png";
 
 const navLinks = [
     { name: "Home", href: "/" },
@@ -41,13 +43,16 @@ export default function Header() {
                     href="/"
                     className="flex flex-col items-center md:items-start z-20 absolute left-1/2 -translate-x-1/2 md:static md:left-0 md:translate-x-0 group"
                 >
-                    <div className="flex flex-col items-center md:items-start transition-transform duration-300 group-hover:scale-105">
-                        <span className="text-xl md:text-2xl font-serif tracking-tight text-charmora-purple leading-tight">
-                            Cinderella's
-                        </span>
-                        <span className="text-[8px] md:text-[10px] uppercase tracking-[0.4em] -mt-1 text-charmora-pink-dark font-sans font-semibold text-center md:text-left">
-                            Charmora
-                        </span>
+                    <div className="flex items-center gap-2 md:gap-3 transition-transform duration-300 group-hover:scale-105">
+                        <Image src={logo} alt="Cinderella's Charmora Logo" width={40} height={40} className="h-10 w-auto object-contain" priority />
+                        <div className="flex flex-col items-center md:items-start">
+                            <span className="text-xl md:text-2xl font-serif tracking-tight text-charmora-purple leading-tight">
+                                Cinderella's
+                            </span>
+                            <span className="text-[8px] md:text-[10px] uppercase tracking-[0.4em] -mt-1 text-charmora-pink-dark font-sans font-semibold text-center md:text-left">
+                                Charmora
+                            </span>
+                        </div>
                     </div>
                 </Link>
 
