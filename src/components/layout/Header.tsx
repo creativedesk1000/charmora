@@ -24,8 +24,8 @@ export default function Header() {
     return (
         <header className="w-full bg-white border-b border-charmora-pink/20">
             {/* Announcement Bar */}
-            <div className="bg-[#FFF5F7] py-2 px-4 text-center border-b border-charmora-pink/10">
-                <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-charmora-purple font-medium">
+            <div className="bg-charmora-purple py-2 px-4 text-center border-b border-charmora-purple/10">
+                <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-white font-medium">
                     Delivery within 9-10 working days
                 </p>
             </div>
@@ -62,7 +62,7 @@ export default function Header() {
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-xs uppercase tracking-[0.2em] text-charmora-purple/80 hover:text-charmora-pink-dark transition-colors duration-300 font-sans font-medium relative group"
+                            className="text-xs uppercase tracking-[0.2em] text-charmora-purple hover:text-charmora-pink-dark transition-colors duration-300 font-sans font-medium relative group"
                         >
                             {link.name}
                             {link.name === "Collections" && (

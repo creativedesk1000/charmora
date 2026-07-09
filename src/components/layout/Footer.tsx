@@ -72,8 +72,13 @@ export default function Footer() {
             </div>
 
             <div className="max-w-7xl mx-auto pt-8 border-t border-charmora-pink/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] uppercase tracking-widest text-charmora-purple/40 font-bold">
-                <p>© {currentYear} Cinderella's Charmora. Crafted with Pride in Pakistan.</p>
-                <div className="flex gap-8">
+                <div className="flex flex-col items-center md:items-start gap-2">
+                    <p>© {currentYear} Cinderella's Charmora. Crafted with Pride in Pakistan.</p>
+                    <p>
+                        Developed by <a href="https://www.techzaiqa.com/" target="_blank" rel="noopener noreferrer" className="text-charmora-purple hover:text-charmora-pink-dark transition-colors font-black">Tech Zaiqa</a>
+                    </p>
+                </div>
+                <div className="flex items-center gap-8">
                     <Link href="/admin" className="px-4 py-2 bg-charmora-purple text-white rounded-full hover:bg-charmora-purple/90 transition-all font-sans text-[10px] tracking-widest">Admin Portal</Link>
                 </div>
             </div>
