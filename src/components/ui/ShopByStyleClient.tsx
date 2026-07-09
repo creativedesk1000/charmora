@@ -293,69 +293,36 @@ export default function ShopByStyleClient({ categories }: { categories: Category
           100%{ transform: rotate(-3deg); }
         }
 
-        .cc-info{
-          position: absolute;
-          left: 0; right: 0; bottom: 0;
-          z-index: 3;
-          padding: 14px 14px 16px;
+        .cc-info-outside{
           display: flex;
-          flex-direction: column;
+          justify-content: space-between;
           align-items: flex-start;
-          justify-content: flex-end;
-          gap: 6px;
+          padding: 8px 4px 0;
         }
 
-        .cc-info-text {
-          transform: translateY(4px);
-          transition: transform .45s var(--ease);
-        }
-        .cc-card:hover .cc-info-text {
-          transform: translateY(0);
-        }
-
-        .cc-info-text h3{
+        .cc-info-outside h3{
           font-family: var(--font-playfair), 'Cormorant Garamond', serif;
           font-style: italic;
           font-weight: 600;
           font-size: 20px;
           margin: 0 0 2px;
           letter-spacing: .01em;
-          color: #fff;
+          color: var(--plum);
         }
 
-        .cc-count{
+        .cc-info-outside .cc-count{
           font-size: 11.5px;
           letter-spacing: .08em;
           text-transform: uppercase;
-          color: #fff;
+          color: var(--plum-soft);
           font-weight: 500;
           opacity: 0.8;
-          transition: opacity .45s var(--ease);
-        }
-        .cc-card:hover .cc-count {
-          opacity: 1;
         }
 
-        .cc-arrow{
-          flex-shrink: 0;
-          width: 28px; height: 28px;
-          border-radius: 50%;
-          border: 1px solid rgba(255,255,255,.55);
+        .cc-item-wrapper {
           display: flex;
-          align-items: center;
-          justify-content: center;
-          transform: translateX(0) rotate(0deg);
-          transition: transform .45s var(--ease), background .45s var(--ease), border-color .45s var(--ease);
-          align-self: flex-end;
-          margin-top: -18px;
+          flex-direction: column;
         }
-        .cc-arrow svg{ width: 14px; height: 14px; transition: transform .45s var(--ease); }
-        .cc-card:hover .cc-arrow{
-          background: var(--gold);
-          border-color: var(--gold);
-          transform: rotate(45deg);
-        }
-        .cc-card:hover .cc-arrow svg{ transform: rotate(-45deg); }
 
         @media (prefers-reduced-motion: reduce){
           .cc-card, .cc-header, .cc-media, .cc-icon-wrap, .cc-arrow, .cc-tag{
@@ -379,32 +346,27 @@ export default function ShopByStyleClient({ categories }: { categories: Category
             const bgImg = category.image ? `url('${category.image}')` : style.bg;
 
             return (
-              <a
-                key={category.id}
-                href={`/shop?category=${category.slug}`}
-                className="cc-card"
-                data-reveal
-                style={{ '--img': bgImg } as React.CSSProperties}
-              >
-                <div className="cc-media" />
-                <div className="cc-icon-wrap">{svg}</div>
-                <div className="cc-shine" />
-                {style.tag && <span className="cc-tag">{style.tag}</span>}
-                <div className="cc-info">
-                  <div className="cc-info-text">
+              <div key={category.id} className="cc-item-wrapper">
+                <a
+                  href={`/shop?category=${category.slug}`}
+                  className="cc-card"
+                  data-reveal
+                  style={{ '--img': bgImg } as React.CSSProperties}
+                >
+                  <div className="cc-media" />
+                  <div className="cc-icon-wrap">{svg}</div>
+                  <div className="cc-shine" />
+                  {style.tag && <span className="cc-tag">{style.tag}</span>}
+                </a>
+                <div className="cc-info-outside" data-reveal>
+                  <div>
                     <h3>{category.name}</h3>
                     <span className="cc-count">
                       {category._count?.products === 1 ? '1 piece' : `${category._count?.products || 0} pieces`}
                     </span>
                   </div>
-                  <span className="cc-arrow">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="5" y1="19" x2="19" y2="5"/>
-                      <polyline points="8 5 19 5 19 16"/>
-                    </svg>
-                  </span>
                 </div>
-              </a>
+              </div>
             );
           })}
         </div>

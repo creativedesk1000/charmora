@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum Role {
@@ -67,6 +68,7 @@ model Product {
   price         Float
   stock         Int           @default(0)
   image         String?
+  images        String[]      @default([])
   status        ProductStatus @default(ACTIVE)
   isBestseller  Boolean       @default(false)
   isNewArrival  Boolean       @default(false)

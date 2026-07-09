@@ -7,7 +7,8 @@ import Image from "next/image";
 import { Plus, Minus, Heart, Share2 } from "lucide-react";
 import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
-import ProductClient from "./ProductClient"; // We'll create this for interaction
+import ProductClient from "./ProductClient";
+import ProductGallery from "./ProductGallery";
 
 export default async function ProductDetail({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
@@ -46,29 +47,11 @@ export default async function ProductDetail({ params }: { params: Promise<{ slug
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 mb-24">
 
                         {/* Gallery */}
-                        <div className="space-y-6">
-                            <div className="aspect-square bg-white relative rounded-2xl overflow-hidden border border-charmora-purple/5 shadow-sm">
-                                <Image
-                                    src={product.image || "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1000"}
-                                    alt={product.title}
-                                    fill
-                                    className="object-cover"
-                                    priority
-                                />
-                            </div>
-                            <div className="grid grid-cols-4 gap-4">
-                                {[1, 2, 3, 4].map((i) => (
-                                    <div key={i} className="aspect-square bg-white border border-charmora-purple/10 rounded-lg relative cursor-pointer hover:border-charmora-pink-dark transition-colors overflow-hidden">
-                                        <Image
-                                            src={product.image || "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=600"}
-                                            alt={`${product.title} view ${i}`}
-                                            fill
-                                            className="object-cover opacity-60 hover:opacity-100 transition-opacity"
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                        <ProductGallery 
+                            mainImage={product.image || "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1000"} 
+                            images={product.images || []} 
+                            title={product.title} 
+                        />
 
                         {/* Info */}
                         <div className="flex flex-col pt-4">

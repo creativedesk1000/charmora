@@ -1,9 +1,8 @@
 import React, { useState, useRef } from "react";
-import { X, Save, Loader2, Upload } from "lucide-react";
+import { X, Save, Loader2, Upload, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { createProduct, updateProduct, uploadProductImage } from "@/lib/actions";
 import { toast } from "sonner";
-// import { supabase } from "@/lib/supabase"; // Not needed on client anymore for upload
 
 interface ProductFormProps {
     onClose: () => void;
@@ -24,32 +23,64 @@ export default function ProductForm({ onClose, onSuccess, product, categories }:
         stock: product?.stock || "",
         categoryId: product?.categoryId || (categories.length > 0 ? categories[0].id : ""),
         image: product?.image || "",
+        images: product?.images || [],
         isBestseller: product?.isBestseller || false,
         isNewArrival: product?.isNewArrival || false,
         isFeatured: product?.isFeatured || false,
     });
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
+        const files = Array.from(e.target.files || []);
+        if (files.length === 0) return;
 
         try {
             setUploading(true);
-            
-            const formData = new FormData();
-            formData.append("file", file);
+            const newImageUrls: string[] = [];
 
-            const res = await uploadProductImage(formData);
+            for (const file of files) {
+                const uploadData = new FormData();
+                uploadData.append("file", file);
+                const res = await uploadProductImage(uploadData);
+                if (res.success && res.url) {
+                    newImageUrls.push(res.url);
+                } else {
+                    toast.error(res.error || `Failed to upload ${file.name}`);
+                }
+            }
 
-            if (!res.success) throw new Error(res.error);
-
-            setFormData(prev => ({ ...prev, image: res.url }));
-            toast.success("Image uploaded successfully.");
+            if (newImageUrls.length > 0) {
+                setFormData(prev => {
+                    const updated = { ...prev };
+                    if (!updated.image) {
+                        // First image becomes primary
+                        updated.image = newImageUrls[0];
+                        updated.images = [...prev.images, ...newImageUrls.slice(1)];
+                    } else {
+                        updated.images = [...prev.images, ...newImageUrls];
+                    }
+                    return updated;
+                });
+                toast.success("Images uploaded successfully.");
+            }
         } catch (error: any) {
-            toast.error(error.message || "Error uploading image");
+            toast.error(error.message || "Error uploading images");
         } finally {
             setUploading(false);
+            if (fileInputRef.current) fileInputRef.current.value = "";
         }
+    };
+
+    const removeImage = (url: string, isPrimary: boolean) => {
+        setFormData(prev => {
+            if (isPrimary) {
+                // If primary is removed, promote the first gallery image if exists
+                if (prev.images.length > 0) {
+                    return { ...prev, image: prev.images[0], images: prev.images.slice(1) };
+                }
+                return { ...prev, image: "" };
+            }
+            return { ...prev, images: prev.images.filter(img => img !== url) };
+        });
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -144,45 +175,71 @@ export default function ProductForm({ onClose, onSuccess, product, categories }:
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-[10px] uppercase font-bold text-neutral-400 tracking-widest pl-1">Stock Level</label>
+                        <div className="space-y-2">
+                            <label className="text-[10px] uppercase font-bold text-neutral-400 tracking-widest pl-1">Stock Level</label>
+                            <input
+                                type="number"
+                                required
+                                value={formData.stock}
+                                onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+                                className="w-full bg-neutral-50 border border-transparent focus:border-neutral-200 focus:bg-white outline-none rounded-2xl p-4 text-sm font-sans"
+                                placeholder="0"
+                            />
+                        </div>
+
+                        {/* Media Upload Section */}
+                        <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                                <label className="text-[10px] uppercase font-bold text-neutral-400 tracking-widest pl-1">Product Images</label>
+                                <button
+                                    type="button"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    disabled={uploading}
+                                    className="text-xs font-bold bg-charmora-purple text-white px-3 py-1.5 rounded-lg hover:bg-[#4a2a44] transition-colors flex items-center gap-1"
+                                >
+                                    {uploading ? <Loader2 className="animate-spin" size={14} /> : <Upload size={14} />}
+                                    Upload Multiple
+                                </button>
                                 <input
-                                    type="number"
-                                    required
-                                    value={formData.stock}
-                                    onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                                    className="w-full bg-neutral-50 border border-transparent focus:border-neutral-200 focus:bg-white outline-none rounded-2xl p-4 text-sm font-sans"
-                                    placeholder="0"
+                                    type="file"
+                                    multiple
+                                    ref={fileInputRef}
+                                    onChange={handleFileUpload}
+                                    className="hidden"
+                                    accept="image/*"
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] uppercase font-bold text-neutral-400 tracking-widest pl-1">Media Display</label>
-                                <div className="flex gap-2">
-                                    <input
-                                        type="text"
-                                        value={formData.image}
-                                        onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                                        placeholder="Image URL"
-                                        className="flex-grow bg-neutral-50 border border-transparent focus:border-neutral-200 focus:bg-white outline-none rounded-2xl p-4 text-sm font-sans"
-                                    />
-                                    <input
-                                        type="file"
-                                        ref={fileInputRef}
-                                        onChange={handleFileUpload}
-                                        className="hidden"
-                                        accept="image/*"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => fileInputRef.current?.click()}
-                                        disabled={uploading}
-                                        className="p-4 rounded-2xl bg-neutral-100 hover:bg-neutral-200 border border-dashed border-neutral-300 transition-colors flex items-center justify-center min-w-[3.5rem]"
-                                    >
-                                        {uploading ? <Loader2 className="animate-spin text-neutral-400" size={18} /> : <Upload className="text-neutral-500" size={18} />}
-                                    </button>
-                                </div>
+                            
+                            {/* Gallery Preview */}
+                            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+                                {formData.image && (
+                                    <div className="relative aspect-square rounded-xl overflow-hidden group border-2 border-charmora-pink-dark">
+                                        <img src={formData.image} alt="Primary" className="w-full h-full object-cover" />
+                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                            <button type="button" onClick={() => removeImage(formData.image, true)} className="p-1.5 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors">
+                                                <Trash2 size={14} />
+                                            </button>
+                                        </div>
+                                        <span className="absolute bottom-1 right-1 bg-black/60 text-white text-[8px] uppercase tracking-wider px-1.5 py-0.5 rounded">Primary</span>
+                                    </div>
+                                )}
+                                {formData.images.map((img, idx) => (
+                                    <div key={idx} className="relative aspect-square rounded-xl overflow-hidden group border border-neutral-200">
+                                        <img src={img} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
+                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                            <button type="button" onClick={() => removeImage(img, false)} className="p-1.5 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors">
+                                                <Trash2 size={14} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
+                            {(!formData.image && formData.images.length === 0) && (
+                                <div className="w-full h-32 border-2 border-dashed border-neutral-200 rounded-2xl flex flex-col items-center justify-center text-neutral-400">
+                                    <Upload size={24} className="mb-2 opacity-50" />
+                                    <span className="text-xs font-medium">No images uploaded yet</span>
+                                </div>
+                            )}
                         </div>
 
                         <div className="space-y-2">
