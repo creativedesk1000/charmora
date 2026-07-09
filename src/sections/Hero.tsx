@@ -21,14 +21,37 @@ export default function Hero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1, ease: "easeOut" }}
                 >
-                    <h1 className="text-4xl md:text-8xl text-white mb-10 leading-[1.15] font-serif font-medium tracking-tight">
+                    <motion.h1 
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        className="text-4xl md:text-8xl text-white mb-10 leading-[1.15] font-serif font-medium tracking-tight"
+                    >
                         Jewellery <motion.span
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.5, duration: 1 }}
-                            className="text-charmora-cream"
-                        >That Speaks</motion.span> <br /> Without a Word
-                    </h1>
+                            initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
+                            animate={{ 
+                                opacity: 1, 
+                                scale: [1, 1.05, 1],
+                                filter: "blur(0px)",
+                                textShadow: ["0px 0px 0px rgba(244,194,194,0)", "0px 0px 20px rgba(244,194,194,0.6)", "0px 0px 0px rgba(244,194,194,0)"]
+                            }}
+                            transition={{ 
+                                opacity: { delay: 0.4, duration: 1 },
+                                scale: { delay: 1, duration: 4, repeat: Infinity, ease: "easeInOut" },
+                                textShadow: { delay: 1, duration: 4, repeat: Infinity, ease: "easeInOut" },
+                                filter: { delay: 0.4, duration: 1 }
+                            }}
+                            className="text-[#f4c2c2] italic font-normal inline-block"
+                        >That Speaks</motion.span> <br /> 
+                        <motion.span
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
+                            className="inline-block"
+                        >
+                            Without a Word
+                        </motion.span>
+                    </motion.h1>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                         <Link href="/shop">
                             <motion.div

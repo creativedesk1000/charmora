@@ -126,11 +126,11 @@ export default function ShopByStyleClient({ categories }: { categories: Category
   return (
     <section 
       ref={sectionRef} 
-      className={`collections-section py-24 px-6 md:px-12 bg-white overflow-hidden relative ${inView ? 'in-view' : ''}`}
+      className={`collections-section py-24 px-6 md:px-12 bg-charmora-purple overflow-hidden relative ${inView ? 'in-view' : ''}`}
       style={{
-        background: `radial-gradient(ellipse 80% 60% at 15% 0%, rgba(217,169,160,0.25), transparent 60%),
-                     radial-gradient(ellipse 70% 50% at 100% 100%, rgba(201,161,90,0.14), transparent 60%),
-                     var(--ivory, #FBF6F1)`
+        background: `radial-gradient(ellipse 80% 60% at 15% 0%, rgba(255,105,180,0.15), transparent 60%),
+                     radial-gradient(ellipse 70% 50% at 100% 100%, rgba(245,245,220,0.1), transparent 60%),
+                     #5D3455`
       }}
     >
       <style dangerouslySetInnerHTML={{__html: `
@@ -152,16 +152,16 @@ export default function ShopByStyleClient({ categories }: { categories: Category
         .cs-header { text-align: center; max-width: 620px; margin: 0 auto 4.5rem; }
         .cs-eyebrow {
           display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.72rem;
-          letter-spacing: 0.28em; text-transform: uppercase; font-weight: 700; color: var(--wine);
+          letter-spacing: 0.28em; text-transform: uppercase; font-weight: 700; color: #F5F5DC;
           margin-bottom: 1.4rem; font-family: 'Manrope', sans-serif;
         }
-        .cs-eyebrow::before, .cs-eyebrow::after { content: ''; width: 22px; height: 1px; background: var(--gold); }
+        .cs-eyebrow::before, .cs-eyebrow::after { content: ''; width: 22px; height: 1px; background: #F5F5DC; }
         .cs-heading {
           font-family: 'Fraunces', serif; font-weight: 500; font-size: clamp(2.1rem, 4.4vw, 3.4rem);
-          line-height: 1.12; letter-spacing: -0.01em; margin: 0 0 1.1rem; color: var(--ink);
+          line-height: 1.12; letter-spacing: -0.01em; margin: 0 0 1.1rem; color: #FFFFFF;
         }
-        .cs-heading em { font-style: italic; font-weight: 400; color: var(--wine); }
-        .cs-sub { font-size: 1.02rem; line-height: 1.65; color: var(--ink-soft); margin: 0; font-weight: 500; font-family: 'Manrope', sans-serif;}
+        .cs-heading em { font-style: italic; font-weight: 400; color: #F5F5DC; }
+        .cs-sub { font-size: 1.02rem; line-height: 1.65; color: #F5F5DC; margin: 0; font-weight: 500; font-family: 'Manrope', sans-serif; opacity: 0.8;}
         
         .cs-stage-wrap {
           overflow-x: auto; overflow-y: visible; scrollbar-width: none; -ms-overflow-style: none;
@@ -212,21 +212,21 @@ export default function ShopByStyleClient({ categories }: { categories: Category
         .cs-charm:focus-visible { outline: none; }
         .cs-charm:focus-visible .cs-charm-orb { box-shadow: 0 0 0 3px var(--gold), 0 14px 28px -10px rgba(122,46,58,0.45); }
         
-        .cs-charm-label { margin-top: 0.85rem; font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 500; letter-spacing: 0.01em; color: var(--ink); }
+        .cs-charm-label { margin-top: 0.85rem; font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 500; letter-spacing: 0.01em; color: #FFFFFF; }
         .cs-charm-tag {
-          max-width: 150px; font-size: 0.76rem; color: var(--ink-soft); line-height: 1.4; margin-top: 0.3rem; opacity: 0;
+          max-width: 150px; font-size: 0.76rem; color: #F5F5DC; line-height: 1.4; margin-top: 0.3rem; opacity: 0;
           max-height: 0; overflow: hidden; transition: opacity .3s ease, max-height .3s ease, margin .3s ease;
         }
         .cs-charm:hover .cs-charm-tag, .cs-charm:focus-visible .cs-charm-tag { opacity: 1; max-height: 3.2em; margin-top: 0.45rem; }
         
         .cs-footer { text-align: center; margin-top: 4rem; }
         .cs-cta {
-          font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 0.92rem; letter-spacing: 0.02em; color: var(--wine);
+          font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 0.92rem; letter-spacing: 0.02em; color: #F5F5DC;
           text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; padding-bottom: 3px;
-          background-image: linear-gradient(var(--gold), var(--gold)); background-repeat: no-repeat; background-position: left bottom;
+          background-image: linear-gradient(#F5F5DC, #F5F5DC); background-repeat: no-repeat; background-position: left bottom;
           background-size: 0% 1.5px; transition: background-size .35s ease, gap .35s ease, color .35s ease;
         }
-        .cs-cta:hover { background-size: 100% 1.5px; gap: 0.75rem; color: var(--wine-dark); }
+        .cs-cta:hover { background-size: 100% 1.5px; gap: 0.75rem; color: #FFFFFF; }
         .cs-cta svg { width: 16px; height: 16px; transition: transform .35s ease; }
         .cs-cta:hover svg { transform: translateX(2px); }
         
