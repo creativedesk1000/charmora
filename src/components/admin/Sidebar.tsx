@@ -13,7 +13,8 @@ import {
     ChevronLeft,
     ChevronRight,
     LogOut,
-    Sparkles
+    Sparkles,
+    Globe
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +24,7 @@ const menuItems = [
     { icon: Layers, label: "Categories", href: "/admin/categories" },
     { icon: Package, label: "Inventory", href: "/admin/inventory" },
     { icon: ShoppingCart, label: "Orders", href: "/admin/orders" },
+    { icon: Globe, label: "Edit Website", href: "/admin/website" },
     { icon: Users, label: "Users", href: "/admin/users" },
 ];
 

@@ -121,3 +121,11 @@ model Payment {
   status    String
   createdAt DateTime @default(now())
 }
+
+model SiteConfig {
+  id        String   @id @default("default") // Singleton
+  logoUrl   String?
+  navMenu   Json?    // Array of {name, href, order}
+  footer    Json?    // Object with text, links, social
+  updatedAt DateTime @updatedAt
+}

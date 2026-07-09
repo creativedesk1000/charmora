@@ -7,10 +7,11 @@ import {
     Clock,
     Truck,
     XCircle,
-    PackageCheck
+    PackageCheck,
+    Trash2
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { updateOrder } from "@/lib/actions";
+import { updateOrder, deleteOrder } from "@/lib/actions";
 import { toast } from "sonner";
 
 const statusStyles = {
@@ -46,6 +47,17 @@ export default function OrdersClient({ initialOrders }: { initialOrders: any[] }
             toast.success(`Order status updated to ${status}`);
         } else {
             toast.error("Failed to update status");
+        }
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!confirm("Are you sure you want to permanently delete this cancelled order?")) return;
+        const res = await deleteOrder(id);
+        if (res.success) {
+            setOrders(orders.filter(o => o.id !== id));
+            toast.success("Order deleted permanently");
+        } else {
+            toast.error(res.error || "Failed to delete order");
         }
     };
 
@@ -154,6 +166,15 @@ export default function OrdersClient({ initialOrders }: { initialOrders: any[] }
                                                 >
                                                     <Eye size={18} />
                                                 </button>
+                                                {order.status === "CANCELLED" && (
+                                                    <button 
+                                                        onClick={() => handleDelete(order.id)}
+                                                        title="Delete Cancelled Order Permanently"
+                                                        className="p-2.5 rounded-xl text-red-400 hover:text-red-600 hover:bg-red-50 transition-all"
+                                                    >
+                                                        <Trash2 size={18} />
+                                                    </button>
+                                                )}
                                             </div>
                                         </td>
                                     </motion.tr>

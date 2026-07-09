@@ -3,6 +3,7 @@
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { supabase } from "@/lib/supabase";
+import { sendOrderConfirmation, sendOrderStatusUpdate } from "@/lib/email";
 
 // Product Actions
 export async function uploadProductImage(formData: FormData) {
@@ -239,6 +240,9 @@ export async function placeOrder(data: any) {
             return newOrder;
         });
 
+        // Send Email Confirmations asynchronously so it doesn't block the UI
+        sendOrderConfirmation(order).catch(console.error);
+
         revalidatePath("/admin/orders");
         return { success: true, orderId: order.id };
     } catch (error) {
@@ -254,6 +258,10 @@ export async function updateOrder(id: string, data: any) {
             where: { id },
             data
         });
+        
+        // Send email update asynchronously
+        sendOrderStatusUpdate(updated).catch(console.error);
+
         console.log("Order intelligence updated successfully:", updated.id);
         revalidatePath("/admin/orders");
         return { success: true };
@@ -265,7 +273,34 @@ export async function updateOrder(id: string, data: any) {
         };
     }
 }
-  
+export async function deleteOrder(id: string) {
+    try {
+        // First delete associated OrderItems
+        await prisma.orderItem.deleteMany({
+            where: { orderId: id }
+        });
+        
+        // Then delete associated Payment if exists
+        await prisma.payment.deleteMany({
+            where: { orderId: id }
+        });
+
+        // Finally delete the Order
+        await prisma.order.delete({
+            where: { id }
+        });
+        
+        revalidatePath("/admin/orders");
+        return { success: true };
+    } catch (error: any) {
+        console.error("Delete Order Error:", error);
+        return { 
+            success: false, 
+            error: error.message || "Failed to delete order permanently." 
+        };
+    }
+}
+
 export async function getOrder(id: string) {  
     try {  
         const order = await prisma.order.findUnique({  
@@ -281,5 +316,59 @@ export async function getOrder(id: string) {
         return { success: true, order };  
     } catch (error) {
         return { success: false, error: "Order not found." };
+    }
+}
+
+// Site Configuration Actions
+export async function uploadLogoImage(formData: FormData) {
+    try {
+        const file = formData.get("file") as File;
+        if (!file) throw new Error("No file provided");
+        
+        const fileExt = file.name.split(".").pop();
+        const fileName = `logo-${Date.now()}.${fileExt}`;
+        const filePath = `site/${fileName}`;
+        
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+        
+        const { error: uploadError } = await supabase.storage
+            .from("products") // Using same public bucket for simplicity
+            .upload(filePath, buffer, {
+                contentType: file.type,
+                upsert: true,
+            });
+            
+        if (uploadError) throw uploadError;
+        
+        const { data: { publicUrl } } = supabase.storage
+            .from("products")
+            .getPublicUrl(filePath);
+            
+        return { success: true, url: publicUrl };
+    } catch (error: any) {
+        console.error("Upload Logo Error:", error);
+        return { success: false, error: error.message || "Failed to upload logo." };
+    }
+}
+
+export async function updateSiteConfig(data: any) {
+    try {
+        // Upsert because it might not exist yet
+        const config = await prisma.siteConfig.upsert({
+            where: { id: "default" },
+            update: data,
+            create: {
+                id: "default",
+                ...data
+            }
+        });
+        
+        revalidatePath("/");
+        revalidatePath("/admin/website");
+        return { success: true, config };
+    } catch (error: any) {
+        console.error("Update Site Config Error:", error);
+        return { success: false, error: "Failed to update website configuration." };
     }
 }
