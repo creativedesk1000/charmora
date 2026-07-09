@@ -22,7 +22,7 @@ export default function Header() {
     const { totalItems } = useCart();
 
     return (
-        <header className="w-full bg-white border-b border-charmora-pink/20">
+        <header className="w-full bg-[#e8afcb] border-b border-[#e8afcb]">
             {/* Announcement Bar */}
             <div className="bg-charmora-purple py-2 px-4 text-center border-b border-charmora-purple/10">
                 <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-white font-medium">

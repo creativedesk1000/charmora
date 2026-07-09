@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://charmora.vercel.app/sitemap.xml
+Sitemap: https://www.cinderellazcharmora.com/sitemap.xml

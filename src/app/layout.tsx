@@ -13,6 +13,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.cinderellazcharmora.com'),
   title: "Cinderella's Charmora | Timeless Handcrafted Elegance",
   description: "Exquisite handmade necklaces, bracelets, and artisan accessories for the modern woman.",
   icons: {
