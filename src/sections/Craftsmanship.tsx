@@ -31,14 +31,14 @@ export default function Craftsmanship() {
 
                         {/* Heading */}
                         <h2 className="text-3xl md:text-5xl text-charmora-purple font-serif mb-8 leading-tight max-w-2xl">
-                            Crafting Elegance, Since 2023
+                            Crafting Elegance, Since August 2024
                         </h2>
 
                         {/* Message */}
                         <div className="max-w-3xl space-y-6 text-gray-500 leading-relaxed font-sans italic relative">
                             <span className="absolute -top-4 -left-4 text-6xl text-orange-100 font-serif -z-10">"</span>
                             <p className="text-sm md:text-lg">
-                                Hi, I'm Cinderella, the owner of Charmora. I started this small business in November 2023 with the dream of becoming independent and sharing unique handmade jewelry you won't find anywhere else.
+                                Hi, I'm Warda, the owner of Cinderella's Charmora. I started this small business in August 2024 with the dream of becoming independent and sharing unique handmade jewelry you won't find anywhere else.
                             </p>
                             <p className="text-sm md:text-lg">
                                 Every piece is made with love and high-quality materials. I'm so grateful to have you as part of my journey ❤️

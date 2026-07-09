@@ -22,12 +22,12 @@ export default function Hero() {
                     transition={{ duration: 1, ease: "easeOut" }}
                 >
                     <h1 className="text-4xl md:text-8xl text-white mb-10 leading-[1.15] font-serif font-medium tracking-tight">
-                        Discover <motion.span
+                        Jewellery <motion.span
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.5, duration: 1 }}
                             className="text-charmora-cream"
-                        >Elegance</motion.span> <br /> in Every Detail
+                        >That Speaks</motion.span> <br /> Without a Word
                     </h1>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                         <Link href="/shop">

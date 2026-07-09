@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shop by Style — Collections</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#FBF6F1;
+    --blush:#F3DCD4;
+    --rose:#D9A9A0;
+    --wine:#7A2E3A;
+    --wine-dark:#4E1620;
+    --gold:#C9A15A;
+    --gold-light:#EBD8AA;
+    --ink:#2B1F22;
+    --ink-soft:#7A6669;
+    --thread:#C7A98F;
+  }
+
+  *{ box-sizing:border-box; }
+
+  .collections-section{
+    background:
+      radial-gradient(ellipse 80% 60% at 15% 0%, rgba(217,169,160,0.25), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 100% 100%, rgba(201,161,90,0.14), transparent 60%),
+      var(--ivory);
+    color:var(--ink);
+    font-family:'Manrope', sans-serif;
+    padding: 6rem 1.5rem 5rem;
+    overflow:hidden;
+    position:relative;
+  }
+
+  .cs-inner{
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  /* ---------- Header ---------- */
+  .cs-header{
+    text-align:center;
+    max-width: 620px;
+    margin: 0 auto 4.5rem;
+  }
+
+  .cs-eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:0.6rem;
+    font-size:0.72rem;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--wine);
+    margin-bottom:1.4rem;
+  }
+  .cs-eyebrow::before,
+  .cs-eyebrow::after{
+    content:'';
+    width:22px;
+    height:1px;
+    background:var(--gold);
+  }
+
+  .cs-heading{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size: clamp(2.1rem, 4.4vw, 3.4rem);
+    line-height:1.12;
+    letter-spacing:-0.01em;
+    margin:0 0 1.1rem;
+  }
+  .cs-heading em{
+    font-style:italic;
+    font-weight:400;
+    color:var(--wine);
+  }
+
+  .cs-sub{
+    font-size:1.02rem;
+    line-height:1.65;
+    color:var(--ink-soft);
+    margin:0;
+    font-weight:500;
+  }
+
+  /* ---------- Thread stage ---------- */
+  .cs-stage-wrap{
+    overflow-x:auto;
+    overflow-y:visible;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+    margin: 0 -1.5rem;
+    padding: 1rem 1.5rem 0.5rem;
+  }
+  .cs-stage-wrap::-webkit-scrollbar{ display:none; }
+
+  .cs-stage{
+    position:relative;
+    width:100%;
+    min-width: 760px;
+    aspect-ratio: 1000 / 300;
+  }
+
+  .cs-thread-svg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    overflow:visible;
+  }
+
+  .cs-thread-path{
+    fill:none;
+    stroke:var(--thread);
+    stroke-width:2.5;
+    stroke-linecap:round;
+    stroke-dasharray: 1400;
+    stroke-dashoffset: 1400;
+    transition: stroke-dashoffset 1.6s cubic-bezier(.22,.8,.28,1);
+  }
+  .collections-section.in-view .cs-thread-path{
+    stroke-dashoffset: 0;
+  }
+
+  .cs-clasp{
+    fill:none;
+    stroke:var(--gold);
+    stroke-width:2.5;
+    stroke-linecap:round;
+    opacity:0;
+    transition: opacity .5s ease .9s;
+  }
+  .collections-section.in-view .cs-clasp{ opacity:0.9; }
+
+  .cs-charm{
+    position:absolute;
+    transform: translate(-50%,-50%) scale(0.5);
+    width: 118px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    background:none;
+    border:none;
+    padding:0;
+    cursor:pointer;
+    font-family:inherit;
+    opacity:0;
+    transition:
+      opacity .55s cubic-bezier(.22,.8,.28,1),
+      transform .55s cubic-bezier(.22,.8,.28,1);
+  }
+  .collections-section.in-view .cs-charm{
+    opacity:1;
+    transform: translate(-50%,-50%) scale(1);
+  }
+  .cs-charm:nth-of-type(1){ transition-delay: .15s; }
+  .cs-charm:nth-of-type(2){ transition-delay: .35s; }
+  .cs-charm:nth-of-type(3){ transition-delay: .55s; }
+  .cs-charm:nth-of-type(4){ transition-delay: .75s; }
+  .cs-charm:nth-of-type(5){ transition-delay: .95s; }
+  .cs-charm:nth-of-type(6){ transition-delay: 1.15s; }
+
+  .cs-charm-orb{
+    width: 72px;
+    height: 72px;
+    border-radius:50%;
+    background: linear-gradient(160deg, #ffffff 0%, var(--blush) 100%);
+    box-shadow:
+      0 1px 2px rgba(122,46,58,0.08),
+      0 10px 24px -10px rgba(122,46,58,0.35),
+      inset 0 0 0 1px rgba(255,255,255,0.6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    animation: cs-bob 5.5s ease-in-out infinite;
+    animation-play-state: paused;
+    transition: box-shadow .35s ease, transform .35s cubic-bezier(.22,.8,.28,1);
+  }
+  .collections-section.in-view .cs-charm-orb{ animation-play-state: running; }
+  .cs-charm:nth-of-type(2n) .cs-charm-orb{ animation-delay: -1.8s; }
+  .cs-charm:nth-of-type(3n) .cs-charm-orb{ animation-delay: -3.2s; }
+
+  @keyframes cs-bob{
+    0%, 100%{ transform: translateY(0); }
+    50%{ transform: translateY(-7px); }
+  }
+
+  .cs-charm-orb svg{ width:32px; height:32px; }
+
+  .cs-charm:hover .cs-charm-orb,
+  .cs-charm:focus-visible .cs-charm-orb{
+    box-shadow:
+      0 0 0 3px var(--gold-light),
+      0 14px 28px -10px rgba(122,46,58,0.45);
+    transform: scale(1.12) translateY(-4px);
+  }
+  .cs-charm:focus-visible{ outline:none; }
+  .cs-charm:focus-visible .cs-charm-orb{
+    box-shadow:
+      0 0 0 3px var(--gold),
+      0 14px 28px -10px rgba(122,46,58,0.45);
+  }
+
+  .cs-charm-label{
+    margin-top:0.85rem;
+    font-family:'Fraunces', serif;
+    font-size:1rem;
+    font-weight:500;
+    letter-spacing:0.01em;
+    color:var(--ink);
+  }
+
+  .cs-charm-tag{
+    max-width:150px;
+    font-size:0.76rem;
+    color:var(--ink-soft);
+    line-height:1.4;
+    margin-top:0.3rem;
+    opacity:0;
+    max-height:0;
+    overflow:hidden;
+    transition: opacity .3s ease, max-height .3s ease, margin .3s ease;
+  }
+  .cs-charm:hover .cs-charm-tag,
+  .cs-charm:focus-visible .cs-charm-tag{
+    opacity:1;
+    max-height:3.2em;
+    margin-top:0.45rem;
+  }
+
+  /* ---------- Footer CTA ---------- */
+  .cs-footer{
+    text-align:center;
+    margin-top: 4rem;
+  }
+
+  .cs-cta{
+    font-family:'Manrope', sans-serif;
+    font-weight:700;
+    font-size:0.92rem;
+    letter-spacing:0.02em;
+    color:var(--wine);
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:0.5rem;
+    padding-bottom:3px;
+    background-image: linear-gradient(var(--gold), var(--gold));
+    background-repeat:no-repeat;
+    background-position: left bottom;
+    background-size: 0% 1.5px;
+    transition: background-size .35s ease, gap .35s ease, color .35s ease;
+  }
+  .cs-cta:hover{
+    background-size: 100% 1.5px;
+    gap:0.75rem;
+    color:var(--wine-dark);
+  }
+  .cs-cta svg{ width:16px; height:16px; transition: transform .35s ease; }
+  .cs-cta:hover svg{ transform: translateX(2px); }
+
+  @media (max-width: 600px){
+    .collections-section{ padding: 4.5rem 1.25rem 3.5rem; }
+    .cs-header{ margin-bottom: 3rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .cs-thread-path, .cs-clasp, .cs-charm, .cs-charm-orb, .cs-cta{
+      transition-duration: .01ms !important;
+      animation: none !important;
+    }
+  }
+</style>
+</head>
+<body style="margin:0;">
+
+<section class="collections-section" id="collectionsSection">
+  <div class="cs-inner">
+
+    <div class="cs-header">
+      <span class="cs-eyebrow">Shop by style</span>
+      <h2 class="cs-heading">Find the strand<br><em>made for you</em></h2>
+      <p class="cs-sub">Six collections, one cord — from delicate beadwork to engraved gold. Browse them the way you'd browse a jewelry box.</p>
+    </div>
+
+    <div class="cs-stage-wrap">
+      <div class="cs-stage" id="csStage">
+
+        <svg class="cs-thread-svg" viewBox="0 0 1000 300" preserveAspectRatio="none" aria-hidden="true">
+          <path class="cs-clasp" d="M 18 150 a 14 14 0 1 0 0.1 0" />
+          <path id="csThreadPath" class="cs-thread-path"
+                d="M 30 150 C 100 60, 180 240, 250 150 S 400 60, 470 150 S 620 240, 690 150 S 840 60, 910 150 S 960 190, 980 150" />
+          <path class="cs-clasp" d="M 982 150 a 14 14 0 1 0 0.1 0" />
+        </svg>
+
+        <button class="cs-charm" type="button" data-cat="beaded">
+          <span class="cs-charm-orb">
+            <svg viewBox="0 0 32 32" fill="none">
+              <circle cx="7" cy="16" r="5" fill="var(--rose)"/>
+              <circle cx="16" cy="16" r="5" fill="var(--gold)"/>
+              <circle cx="25" cy="16" r="5" fill="var(--wine)"/>
+            </svg>
+          </span>
+          <span class="cs-charm-label">Beaded</span>
+          <span class="cs-charm-tag">Hand-strung color, one bead at a time.</span>
+        </button>
+
+        <button class="cs-charm" type="button" data-cat="charm">
+          <span class="cs-charm-orb">
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M16 26s-9-5.7-9-12.2C7 9.6 10 7 13.2 7c1.6 0 3 .8 3.8 2 .8-1.2 2.2-2 3.8-2C24 7 27 9.6 27 13.8 27 20.3 16 26 16 26z" fill="var(--wine)"/>
+            </svg>
+          </span>
+          <span class="cs-charm-label">Charm</span>
+          <span class="cs-charm-tag">Little symbols for the things you love.</span>
+        </button>
+
+        <button class="cs-charm" type="button" data-cat="chain">
+          <span class="cs-charm-orb">
+            <svg viewBox="0 0 32 32" fill="none">
+              <ellipse cx="12" cy="16" rx="7" ry="5" stroke="var(--gold)" stroke-width="2.4"/>
+              <ellipse cx="21" cy="16" rx="7" ry="5" stroke="var(--wine)" stroke-width="2.4"/>
+            </svg>
+          </span>
+          <span class="cs-charm-label">Chain-Link</span>
+          <span class="cs-charm-tag">Fine gold links, quietly bold.</span>
+        </button>
+
+        <button class="cs-charm" type="button" data-cat="birthstone">
+          <span class="cs-charm-orb">
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M16 5 26 12 21 27 11 27 6 12Z" fill="var(--rose)" stroke="var(--wine)" stroke-width="1.2" stroke-linejoin="round"/>
+              <path d="M6 12H26M11 27 16 12 21 27M16 5 12 12M16 5 20 12" stroke="#fff" stroke-width="0.8" opacity="0.7"/>
+            </svg>
+          </span>
+          <span class="cs-charm-label">Birthstone</span>
+          <span class="cs-charm-tag">A gem for the month you were born.</span>
+        </button>
+
+        <button class="cs-charm" type="button" data-cat="personalized">
+          <span class="cs-charm-orb">
+            <svg viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="16" r="11" stroke="var(--gold)" stroke-width="1.6"/>
+              <text x="16" y="21" text-anchor="middle" font-family="Fraunces, serif" font-size="14" fill="var(--wine)" font-style="italic">A</text>
+            </svg>
+          </span>
+          <span class="cs-charm-label">Personalized</span>
+          <span class="cs-charm-tag">Names, initials, dates — made yours.</span>
+        </button>
+
+        <button class="cs-charm" type="button" data-cat="pearl">
+          <span class="cs-charm-orb">
+            <svg viewBox="0 0 32 32" fill="none">
+              <circle cx="11" cy="13" r="5.5" fill="#fff" stroke="var(--rose)" stroke-width="1"/>
+              <circle cx="21" cy="13" r="5.5" fill="#fff" stroke="var(--rose)" stroke-width="1"/>
+              <circle cx="16" cy="21" r="5.5" fill="#fff" stroke="var(--rose)" stroke-width="1"/>
+            </svg>
+          </span>
+          <span class="cs-charm-label">Pearl</span>
+          <span class="cs-charm-tag">Soft luster, a timeless shape.</span>
+        </button>
+
+      </div>
+    </div>
+
+    <div class="cs-footer">
+      <a class="cs-cta" href="#">
+        View all collections
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function(){
+  const section = document.getElementById('collectionsSection');
+  const stage = document.getElementById('csStage');
+  const path = document.getElementById('csThreadPath');
+  const charms = Array.from(stage.querySelectorAll('.cs-charm'));
+
+  const fractions = [0.045, 0.235, 0.42, 0.60, 0.785, 0.965];
+
+  function placeCharms(){
+    const len = path.getTotalLength();
+    charms.forEach((charm, i) => {
+      const pt = path.getPointAtLength(fractions[i] * len);
+      charm.style.left = (pt.x / 1000 * 100) + '%';
+      charm.style.top = (pt.y / 300 * 100) + '%';
+    });
+  }
+  placeCharms();
+  window.addEventListener('resize', placeCharms);
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        section.classList.add('in-view');
+        io.disconnect();
+      }
+    });
+  }, { threshold: 0.25 });
+  io.observe(section);
+})();
+</script>
+
+</body>
+</html>

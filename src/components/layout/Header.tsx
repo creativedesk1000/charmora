@@ -24,7 +24,7 @@ export default function Header() {
             {/* Announcement Bar */}
             <div className="bg-[#FFF5F7] py-2 px-4 text-center border-b border-charmora-pink/10">
                 <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-charmora-purple font-medium">
-                    Orders placed after 23 February will be delivered after Eid
+                    Delivery within 9-10 working days
                 </p>
             </div>
 

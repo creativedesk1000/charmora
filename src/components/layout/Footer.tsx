@@ -14,8 +14,8 @@ export default function Footer() {
                         <span className="text-[10px] uppercase tracking-[0.4em] -mt-1 text-charmora-pink-dark font-sans font-bold">Charmora</span>
                     </Link>
                     <p className="text-sm text-charmora-purple/70 leading-relaxed font-sans max-w-xs">
-                        Handcrafting timeless accessories that celebrate individual elegance and refined artistry.
-                    </p>
+                        Crafted with Love 💗.
+                        Worn with Confidence 🔥. Treasured Forever ✨.                    </p>
                 </div>
 
                 {/* Quick Links */}
@@ -33,15 +33,16 @@ export default function Footer() {
                 <div>
                     <h4 className="text-xs uppercase tracking-[0.2em] text-charmora-purple font-bold mb-8">Customer Care</h4>
                     <ul className="space-y-4">
-                        <li><Link href="/contact" className="text-sm text-charmora-purple/60 hover:text-charmora-pink-dark transition-colors font-sans">Contact Concierge</Link></li>
+                        <li><Link href="/contact" className="text-sm text-charmora-purple/60 hover:text-charmora-pink-dark transition-colors font-sans">Return & Refund Policy</Link></li>
                         <li><Link href="/shipping" className="text-sm text-charmora-purple/60 hover:text-charmora-pink-dark transition-colors font-sans">Shipping & Delivery</Link></li>
-                        <li><Link href="/care-instructions" className="text-sm text-charmora-purple/60 hover:text-charmora-pink-dark transition-colors font-sans">Care Guide</Link></li>
+                        <li><Link href="/privacy-policy" className="text-sm text-charmora-purple/60 hover:text-charmora-pink-dark transition-colors font-sans">Privacy Policy</Link></li>
+                        <li><Link href="/terms-conditions" className="text-sm text-charmora-purple/60 hover:text-charmora-pink-dark transition-colors font-sans">Terms & Conditions</Link></li>
                     </ul>
                 </div>
 
                 {/* Social & Newsletter */}
                 <div>
-                    <h4 className="text-xs uppercase tracking-[0.2em] text-charmora-purple font-bold mb-8">Join the Boutique</h4>
+                    <h4 className="text-xs uppercase tracking-[0.2em] text-charmora-purple font-bold mb-8">Contact Us</h4>
                     <div className="flex items-center space-x-6 mb-8">
                         <Link href="https://www.instagram.com/cinderellaz.charmora" target="_blank" className="text-charmora-purple/40 hover:text-charmora-pink-dark transition-colors"><Instagram size={20} /></Link>
                         <Link href="https://www.tiktok.com/@charmora1000" target="_blank" className="text-charmora-purple/40 hover:text-charmora-pink-dark transition-colors">
@@ -50,26 +51,24 @@ export default function Footer() {
                             </svg>
                         </Link>
                         <Link href="https://facebook.com" target="_blank" className="text-charmora-purple/40 hover:text-charmora-pink-dark transition-colors"><Facebook size={20} /></Link>
+                        <Link href="https://wa.me/923463688458" target="_blank" className="text-charmora-purple/40 hover:text-charmora-pink-dark transition-colors" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
+                            </svg>
+                        </Link>
                     </div>
-                    <form className="relative group">
-                        <input
-                            type="email"
-                            placeholder="Your email address"
-                            suppressHydrationWarning
-                            className="w-full bg-transparent border-b border-charmora-purple/20 pb-2 text-sm focus:border-charmora-pink-dark outline-none transition-colors font-sans pr-10"
-                        />
-                        <button type="submit" className="absolute right-0 bottom-2 text-charmora-pink-dark">
-                            <Mail size={18} />
-                        </button>
-                    </form>
+                    <div className="flex items-center gap-2 text-sm text-charmora-purple/60 font-sans">
+                        <Mail size={18} className="text-charmora-pink-dark" />
+                        <a href="mailto:charmora1000@gmail.com" className="hover:text-charmora-pink-dark transition-colors">
+                            charmora1000@gmail.com
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <div className="max-w-7xl mx-auto pt-8 border-t border-charmora-pink/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] uppercase tracking-widest text-charmora-purple/40 font-bold">
-                <p>© {currentYear} Cinderella's Charmora. Crafted with Pride.</p>
+                <p>© {currentYear} Cinderella's Charmora. Crafted with Pride in Pakistan.</p>
                 <div className="flex gap-8">
-                    <Link href="/privacy" className="hover:text-charmora-pink-dark transition-colors">Privacy</Link>
-                    <Link href="/terms" className="hover:text-charmora-pink-dark transition-colors">Terms</Link>
                     <Link href="/admin" className="px-4 py-2 bg-charmora-purple text-white rounded-full hover:bg-charmora-purple/90 transition-all font-sans text-[10px] tracking-widest">Admin Portal</Link>
                 </div>
             </div>
