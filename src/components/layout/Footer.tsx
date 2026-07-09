@@ -38,10 +38,11 @@ export default function Footer() {
                 <div>
                     <h4 className="text-xs uppercase tracking-[0.2em] text-charmora-purple font-bold mb-8">Customer Care</h4>
                     <ul className="space-y-4">
-                        <li><Link href="/contact" className="text-sm text-charmora-purple/60 hover:text-charmora-pink-dark transition-colors font-sans">Return & Refund Policy</Link></li>
+                        <li><Link href="/contact" className="text-sm text-charmora-purple/60 hover:text-charmora-pink-dark transition-colors font-sans">Contact Us</Link></li>
+                        <li><Link href="/return-policy" className="text-sm text-charmora-purple/60 hover:text-charmora-pink-dark transition-colors font-sans">Return & Refund Policy</Link></li>
                         <li><Link href="/shipping" className="text-sm text-charmora-purple/60 hover:text-charmora-pink-dark transition-colors font-sans">Shipping & Delivery</Link></li>
-                        <li><Link href="/privacy-policy" className="text-sm text-charmora-purple/60 hover:text-charmora-pink-dark transition-colors font-sans">Privacy Policy</Link></li>
-                        <li><Link href="/terms-conditions" className="text-sm text-charmora-purple/60 hover:text-charmora-pink-dark transition-colors font-sans">Terms & Conditions</Link></li>
+                        <li><Link href="/privacy" className="text-sm text-charmora-purple/60 hover:text-charmora-pink-dark transition-colors font-sans">Privacy Policy</Link></li>
+                        <li><Link href="/terms" className="text-sm text-charmora-purple/60 hover:text-charmora-pink-dark transition-colors font-sans">Terms & Conditions</Link></li>
                     </ul>
                 </div>
 

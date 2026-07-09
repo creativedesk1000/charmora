@@ -14,7 +14,8 @@ import {
     ChevronRight,
     LogOut,
     Sparkles,
-    Globe
+    Globe,
+    Map
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -26,6 +27,7 @@ const menuItems = [
     { icon: ShoppingCart, label: "Orders", href: "/admin/orders" },
     { icon: Globe, label: "Edit Website", href: "/admin/website" },
     { icon: Users, label: "Users", href: "/admin/users" },
+    { icon: Map, label: "View Sitemap", href: "/sitemap.xml", target: "_blank" },
 ];
 
 export default function Sidebar() {
@@ -65,6 +67,7 @@ export default function Sidebar() {
                         <Link
                             key={item.href}
                             href={item.href}
+                            target={item.target || "_self"}
                             className={cn(
                                 "flex items-center gap-4 px-3 py-3 rounded-xl transition-all duration-200 group relative",
                                 isActive

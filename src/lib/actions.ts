@@ -121,21 +121,36 @@ export async function updateProduct(id: string, data: any) {
     }
 }
 
+export async function updateProductStock(id: string, stock: number) {
+    try {
+        const product = await prisma.product.update({
+            where: { id },
+            data: { stock }
+        });
+        revalidatePath("/admin/inventory");
+        revalidatePath("/admin/products");
+        revalidatePath("/shop");
+        revalidatePath(`/shop/${product.slug}`);
+        return { success: true, product };
+    } catch (error) {
+        console.error("Update Stock Error:", error);
+        return { success: false, error: "Failed to update stock." };
+    }
+}
+
 export async function deleteProduct(id: string) {
     try {
-        // Soft-delete / archive to avoid FK constraint violations (OrderItem -> Product)
-        // Also makes sure admin list + shop list exclude it after refresh.
-        await prisma.product.update({
-            where: { id },
-            data: { status: "INACTIVE" },
+        await prisma.product.delete({
+            where: { id }
         });
 
         revalidatePath("/admin/products");
+        revalidatePath("/admin/inventory");
         revalidatePath("/shop");
         return { success: true };
     } catch (error) {
         console.error("Delete Product Error:", error);
-        return { success: false, error: "Archival failed." };
+        return { success: false, error: "Deletion failed. Product may be linked to existing orders." };
     }
 }
 

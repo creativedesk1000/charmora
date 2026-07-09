@@ -41,7 +41,7 @@ export default function Hero() {
                                 textShadow: { delay: 1, duration: 4, repeat: Infinity, ease: "easeInOut" },
                                 filter: { delay: 0.4, duration: 1 }
                             }}
-                            className="text-[#f4c2c2] italic font-normal inline-block"
+                            className="text-[#e8afcb] italic font-normal inline-block"
                         >That Speaks</motion.span> <br /> 
                         <motion.span
                             initial={{ opacity: 0, y: 20 }}

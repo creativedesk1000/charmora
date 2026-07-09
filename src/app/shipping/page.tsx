@@ -38,7 +38,7 @@ export default function ShippingPage() {
                     </p>
                     <p className="mt-4">
                         Items must be returned in their original, unworn condition with all security tags and packaging intact.
-                        To initiate a return, please contact our concierge service at care@charmora.com.
+                        To initiate a return, please contact our concierge service at charmora1000@gmail.com.
                     </p>
                 </section>
             </div>

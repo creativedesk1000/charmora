@@ -35,7 +35,7 @@ export default function ContactPage() {
                                     </div>
                                     <div>
                                         <h4 className="text-sm font-sans font-semibold text-charmora-purple uppercase tracking-widest mb-1">Email Us</h4>
-                                        <p className="text-charmora-purple/60 font-sans">concierge@cinderellazcharmora.com</p>
+                                        <p className="text-charmora-purple/60 font-sans">charmora1000@gmail.com</p>
                                     </div>
                                 </div>
 
@@ -44,8 +44,8 @@ export default function ContactPage() {
                                         <Phone size={20} className="text-charmora-pink-dark" />
                                     </div>
                                     <div>
-                                        <h4 className="text-sm font-sans font-semibold text-charmora-purple uppercase tracking-widest mb-1">Call Us</h4>
-                                        <p className="text-charmora-purple/60 font-sans">+92 (300) 123 4567</p>
+                                        <h4 className="text-sm font-sans font-semibold text-charmora-purple uppercase tracking-widest mb-1">WhatsApp Us</h4>
+                                        <a href="https://wa.me/923463688458" target="_blank" rel="noopener noreferrer" className="text-charmora-purple/60 font-sans hover:text-charmora-pink-dark transition-colors">+92 346 368 8458</a>
                                     </div>
                                 </div>
 
@@ -116,7 +116,7 @@ export default function ContactPage() {
 
             {/* WhatsApp Floating Button */}
             <a
-                href="https://wa.me/923001234567"
+                href="https://wa.me/923463688458"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="fixed bottom-10 right-10 w-16 h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all z-50 group border-4 border-white/20"

@@ -5,6 +5,7 @@ import InventoryClient from "@/app/admin/inventory/InventoryClient";
 
 export default async function InventoryPage() {
     const products = await prisma.product.findMany({
+        where: { status: "ACTIVE" },
         include: { category: true },
         orderBy: { stock: "asc" }, // Show low stock first
     });
