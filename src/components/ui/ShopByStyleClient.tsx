@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -15,266 +15,398 @@ interface Category {
 }
 
 export default function ShopByStyleClient({ categories }: { categories: Category[] }) {
+  const router = useRouter();
   const sectionRef = useRef<HTMLElement>(null);
-  const pathRef = useRef<SVGPathElement>(null);
-  const [inView, setInView] = useState(false);
-  const [charmPositions, setCharmPositions] = useState<{left: string, top: string}[]>([]);
-
-  // The hardcoded icons from the HTML file, we'll assign them by index
-  const SVGs = [
-    // Beaded
-    <svg viewBox="0 0 32 32" fill="none" key="beaded">
-      <circle cx="7" cy="16" r="5" fill="var(--rose)"/>
-      <circle cx="16" cy="16" r="5" fill="var(--gold)"/>
-      <circle cx="25" cy="16" r="5" fill="var(--wine)"/>
-    </svg>,
-    // Charm
-    <svg viewBox="0 0 32 32" fill="none" key="charm">
-      <path d="M16 26s-9-5.7-9-12.2C7 9.6 10 7 13.2 7c1.6 0 3 .8 3.8 2 .8-1.2 2.2-2 3.8-2C24 7 27 9.6 27 13.8 27 20.3 16 26 16 26z" fill="var(--wine)"/>
-    </svg>,
-    // Chain-Link
-    <svg viewBox="0 0 32 32" fill="none" key="chain">
-      <ellipse cx="12" cy="16" rx="7" ry="5" stroke="var(--gold)" strokeWidth="2.4"/>
-      <ellipse cx="21" cy="16" rx="7" ry="5" stroke="var(--wine)" strokeWidth="2.4"/>
-    </svg>,
-    // Birthstone
-    <svg viewBox="0 0 32 32" fill="none" key="birthstone">
-      <path d="M16 5 26 12 21 27 11 27 6 12Z" fill="var(--rose)" stroke="var(--wine)" strokeWidth="1.2" strokeLinejoin="round"/>
-      <path d="M6 12H26M11 27 16 12 21 27M16 5 12 12M16 5 20 12" stroke="#fff" strokeWidth="0.8" opacity="0.7"/>
-    </svg>,
-    // Personalized
-    <svg viewBox="0 0 32 32" fill="none" key="personalized">
-      <circle cx="16" cy="16" r="11" stroke="var(--gold)" strokeWidth="1.6"/>
-      <text x="16" y="21" textAnchor="middle" fontFamily="Fraunces, serif" fontSize="14" fill="var(--wine)" fontStyle="italic">A</text>
-    </svg>,
-    // Pearl
-    <svg viewBox="0 0 32 32" fill="none" key="pearl">
-      <circle cx="11" cy="13" r="5.5" fill="#fff" stroke="var(--rose)" strokeWidth="1"/>
-      <circle cx="21" cy="13" r="5.5" fill="#fff" stroke="var(--rose)" strokeWidth="1"/>
-      <circle cx="16" cy="21" r="5.5" fill="#fff" stroke="var(--rose)" strokeWidth="1"/>
-    </svg>
-  ];
-
-  const genericSvg = (
-    <svg viewBox="0 0 32 32" fill="none">
-        <circle cx="16" cy="16" r="11" stroke="var(--gold)" strokeWidth="1.6"/>
-        <circle cx="16" cy="16" r="5" fill="var(--rose)" />
-    </svg>
-  );
-
-  // Distribute points along the path based on number of categories
-  useEffect(() => {
-    if (!pathRef.current) return;
-    const path = pathRef.current;
-    
-    const calculatePositions = () => {
-      const len = path.getTotalLength();
-      if (len === 0) return; // path not ready
-
-      // Calculate fractions evenly if not exactly 6, otherwise use the specific nice-looking ones
-      let fractions = [];
-      if (categories.length === 6) {
-        fractions = [0.045, 0.235, 0.42, 0.60, 0.785, 0.965];
-      } else {
-        const step = 1 / categories.length;
-        for (let i = 0; i < categories.length; i++) {
-          fractions.push(step * i + (step / 2));
-        }
-      }
-
-      const newPositions = categories.map((_, i) => {
-        const fraction = fractions[i] || 0.5;
-        const pt = path.getPointAtLength(fraction * len);
-        return {
-          left: (pt.x / 1000 * 100) + '%',
-          top: (pt.y / 300 * 100) + '%'
-        };
-      });
-      setCharmPositions(newPositions);
-    };
-
-    calculatePositions();
-    window.addEventListener('resize', calculatePositions);
-    
-    // Quick timeout to let the path render and calculate length properly
-    const timer = setTimeout(calculatePositions, 100);
-    
-    return () => {
-        window.removeEventListener('resize', calculatePositions);
-        clearTimeout(timer);
-    };
-  }, [categories]);
 
   useEffect(() => {
     if (!sectionRef.current) return;
     
+    const targets = sectionRef.current.querySelectorAll('[data-reveal]');
+    if (!('IntersectionObserver' in window)) {
+      targets.forEach((el) => { el.classList.add('is-visible'); });
+      return;
+    }
+    
     const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          setInView(true);
-          io.disconnect();
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.25 });
+    }, { threshold: 0.15 });
     
-    io.observe(sectionRef.current);
+    targets.forEach((el) => { io.observe(el); });
+    
     return () => io.disconnect();
   }, []);
 
-  const router = useRouter();
+  const cardStyles = [
+    { bg: "linear-gradient(150deg, #8C4A5B, #C9A24E)", tag: "Bestseller" },
+    { bg: "linear-gradient(150deg, #4A3140, #B4677A)", tag: "New in" },
+    { bg: "linear-gradient(150deg, #2E1626, #8C4A5B)", tag: "Loved" },
+    { bg: "linear-gradient(150deg, #B4677A, #E7D6A8)", tag: "" },
+    { bg: "linear-gradient(150deg, #C9A24E, #4A3140)", tag: "Coming soon" },
+  ];
+
+  const SVGs = [
+    <svg key="1" viewBox="0 0 64 64" fill="none" stroke="#fff" strokeWidth="1.6" strokeLinecap="round">
+      <circle cx="32" cy="32" r="21"/>
+      <circle cx="32" cy="11" r="3.4" fill="#fff" stroke="none"/>
+      <circle cx="49" cy="21" r="3.4" fill="#fff" stroke="none"/>
+      <circle cx="49" cy="43" r="3.4" fill="#fff" stroke="none"/>
+      <circle cx="32" cy="53" r="3.4" fill="#fff" stroke="none"/>
+      <circle cx="15" cy="43" r="3.4" fill="#fff" stroke="none"/>
+      <circle cx="15" cy="21" r="3.4" fill="#fff" stroke="none"/>
+    </svg>,
+    <svg key="2" viewBox="0 0 64 64" fill="none" stroke="#fff" strokeWidth="1.6" strokeLinecap="round">
+      <path d="M12 14c0 14 9 24 20 24s20-10 20-24"/>
+      <circle cx="32" cy="44" r="5" fill="#fff" stroke="none"/>
+    </svg>,
+    <svg key="3" viewBox="0 0 64 64" fill="none" stroke="#fff" strokeWidth="1.6" strokeLinecap="round">
+      <circle cx="32" cy="14" r="5"/>
+      <path d="M32 19v10c0 8 6 14 6 20a6 6 0 1 1-12 0"/>
+    </svg>,
+    <svg key="4" viewBox="0 0 64 64" fill="none" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 32c0-8 6-14 14-14s14 6 14 14-6 14-14 14"/>
+      <path d="M46 32c0-8-6-14-14-14"/>
+      <circle cx="18" cy="32" r="4" fill="#fff" stroke="none"/>
+    </svg>,
+    <svg key="5" viewBox="0 0 64 64" fill="none" stroke="#fff" strokeWidth="1.6" strokeLinecap="round">
+      <circle cx="16" cy="20" r="6"/>
+      <circle cx="34" cy="14" r="4"/>
+      <circle cx="48" cy="26" r="7"/>
+      <circle cx="22" cy="40" r="5"/>
+      <circle cx="40" cy="44" r="6"/>
+    </svg>
+  ];
+
+  const genericSvg = (
+    <svg viewBox="0 0 64 64" fill="none" stroke="#fff" strokeWidth="1.6" strokeLinecap="round">
+      <circle cx="32" cy="32" r="16"/>
+    </svg>
+  );
 
   return (
-    <section 
-      ref={sectionRef} 
-      className={`collections-section py-24 px-6 md:px-12 bg-charmora-purple overflow-hidden relative ${inView ? 'in-view' : ''}`}
-      style={{
-        background: `radial-gradient(ellipse 80% 60% at 15% 0%, rgba(255,105,180,0.15), transparent 60%),
-                     radial-gradient(ellipse 70% 50% at 100% 100%, rgba(245,245,220,0.1), transparent 60%),
-                     #5D3455`
-      }}
-    >
+    <section ref={sectionRef} className="charmora-categories">
       <style dangerouslySetInnerHTML={{__html: `
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Manrope:wght@400;500;600;700&display=swap');
-        
-        :root {
-          --ivory: #FBF6F1;
-          --blush: #F3DCD4;
-          --rose: #D9A9A0;
-          --wine: #7A2E3A;
-          --wine-dark: #4E1620;
-          --gold: #C9A15A;
-          --gold-light: #EBD8AA;
-          --ink: #2B1F22;
-          --ink-soft: #7A6669;
-          --thread: #C7A98F;
+        :root{
+          --ivory:      #FBF3EC;
+          --plum:       #2E1626;
+          --plum-soft:  #4A3140;
+          --mauve:      #B4677A;
+          --mauve-deep: #8C4A5B;
+          --gold:       #C9A24E;
+          --gold-light: #E7D6A8;
+          --blush:      #F3DCE1;
+          --ease: cubic-bezier(.22,.9,.3,1);
         }
-        .cs-inner { max-width: 1180px; margin: 0 auto; }
-        .cs-header { text-align: center; max-width: 620px; margin: 0 auto 4.5rem; }
-        .cs-eyebrow {
-          display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.72rem;
-          letter-spacing: 0.28em; text-transform: uppercase; font-weight: 700; color: #F5F5DC;
-          margin-bottom: 1.4rem; font-family: 'Manrope', sans-serif;
+
+        .charmora-categories{
+          background: var(--ivory);
+          padding: 88px 24px;
+          font-family: var(--font-inter), 'Jost', sans-serif;
+          color: var(--plum);
+          overflow: hidden;
         }
-        .cs-eyebrow::before, .cs-eyebrow::after { content: ''; width: 22px; height: 1px; background: #F5F5DC; }
-        .cs-heading {
-          font-family: 'Fraunces', serif; font-weight: 500; font-size: clamp(2.1rem, 4.4vw, 3.4rem);
-          line-height: 1.12; letter-spacing: -0.01em; margin: 0 0 1.1rem; color: #FFFFFF;
+
+        .cc-inner{
+          max-width: 1180px;
+          margin: 0 auto;
         }
-        .cs-heading em { font-style: italic; font-weight: 400; color: #F5F5DC; }
-        .cs-sub { font-size: 1.02rem; line-height: 1.65; color: #F5F5DC; margin: 0; font-weight: 500; font-family: 'Manrope', sans-serif; opacity: 0.8;}
-        
-        .cs-stage-wrap {
-          overflow-x: auto; overflow-y: visible; scrollbar-width: none; -ms-overflow-style: none;
-          margin: 0 -1.5rem; padding: 1rem 1.5rem 0.5rem;
+
+        .cc-header{
+          text-align: center;
+          margin-bottom: 56px;
+          opacity: 0;
+          transform: translateY(18px);
+          transition: opacity .8s var(--ease), transform .8s var(--ease);
         }
-        .cs-stage-wrap::-webkit-scrollbar { display: none; }
-        .cs-stage { position: relative; width: 100%; min-width: 760px; aspect-ratio: 1000 / 300; }
-        .cs-thread-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-        .cs-thread-path {
-          fill: none; stroke: var(--thread); stroke-width: 2.5; stroke-linecap: round;
-          stroke-dasharray: 1400; stroke-dashoffset: 1400; transition: stroke-dashoffset 1.6s cubic-bezier(.22,.8,.28,1);
+        .cc-header.is-visible{ opacity: 1; transform: translateY(0); }
+
+        .cc-eyebrow{
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 12px;
+          letter-spacing: .28em;
+          text-transform: uppercase;
+          color: var(--mauve-deep);
+          margin: 0 0 14px;
+          font-weight: 500;
         }
-        .collections-section.in-view .cs-thread-path { stroke-dashoffset: 0; }
-        .cs-clasp { fill: none; stroke: var(--gold); stroke-width: 2.5; stroke-linecap: round; opacity: 0; transition: opacity .5s ease .9s; }
-        .collections-section.in-view .cs-clasp { opacity: 0.9; }
-        
-        .cs-charm {
-          position: absolute; transform: translate(-50%,-50%) scale(0.5); width: 118px;
-          display: flex; flex-direction: column; align-items: center; background: none; border: none;
-          padding: 0; cursor: pointer; font-family: 'Manrope', sans-serif; opacity: 0;
-          transition: opacity .55s cubic-bezier(.22,.8,.28,1), transform .55s cubic-bezier(.22,.8,.28,1);
+        .cc-eyebrow::before,
+        .cc-eyebrow::after{
+          content:"";
+          width: 26px;
+          height: 1px;
+          background: var(--gold);
         }
-        .collections-section.in-view .cs-charm { opacity: 1; transform: translate(-50%,-50%) scale(1); }
-        .cs-charm:nth-of-type(1) { transition-delay: .15s; }
-        .cs-charm:nth-of-type(2) { transition-delay: .35s; }
-        .cs-charm:nth-of-type(3) { transition-delay: .55s; }
-        .cs-charm:nth-of-type(4) { transition-delay: .75s; }
-        .cs-charm:nth-of-type(5) { transition-delay: .95s; }
-        .cs-charm:nth-of-type(6) { transition-delay: 1.15s; }
-        .cs-charm:nth-of-type(7) { transition-delay: 1.35s; }
-        .cs-charm:nth-of-type(8) { transition-delay: 1.55s; }
-        
-        .cs-charm-orb {
-          width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(160deg, #ffffff 0%, var(--blush) 100%);
-          box-shadow: 0 1px 2px rgba(122,46,58,0.08), 0 10px 24px -10px rgba(122,46,58,0.35), inset 0 0 0 1px rgba(255,255,255,0.6);
-          display: flex; align-items: center; justify-content: center; position: relative;
-          animation: cs-bob 5.5s ease-in-out infinite; animation-play-state: paused;
-          transition: box-shadow .35s ease, transform .35s cubic-bezier(.22,.8,.28,1);
+
+        .cc-heading{
+          font-family: var(--font-playfair), 'Cormorant Garamond', serif;
+          font-weight: 600;
+          font-size: clamp(34px, 5vw, 54px);
+          line-height: 1.1;
+          margin: 0 0 14px;
+          letter-spacing: .01em;
         }
-        .collections-section.in-view .cs-charm-orb { animation-play-state: running; }
-        .cs-charm:nth-of-type(2n) .cs-charm-orb { animation-delay: -1.8s; }
-        .cs-charm:nth-of-type(3n) .cs-charm-orb { animation-delay: -3.2s; }
-        @keyframes cs-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
-        .cs-charm-orb svg { width: 32px; height: 32px; }
-        .cs-charm:hover .cs-charm-orb, .cs-charm:focus-visible .cs-charm-orb {
-          box-shadow: 0 0 0 3px var(--gold-light), 0 14px 28px -10px rgba(122,46,58,0.45); transform: scale(1.12) translateY(-4px);
+        .cc-heading em{
+          font-style: italic;
+          color: var(--mauve);
+          font-weight: 500;
         }
-        .cs-charm:focus-visible { outline: none; }
-        .cs-charm:focus-visible .cs-charm-orb { box-shadow: 0 0 0 3px var(--gold), 0 14px 28px -10px rgba(122,46,58,0.45); }
-        
-        .cs-charm-label { margin-top: 0.85rem; font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 500; letter-spacing: 0.01em; color: #FFFFFF; }
-        .cs-charm-tag {
-          max-width: 150px; font-size: 0.76rem; color: #F5F5DC; line-height: 1.4; margin-top: 0.3rem; opacity: 0;
-          max-height: 0; overflow: hidden; transition: opacity .3s ease, max-height .3s ease, margin .3s ease;
+
+        .cc-sub{
+          max-width: 480px;
+          margin: 0 auto;
+          font-size: 15.5px;
+          line-height: 1.7;
+          color: var(--plum-soft);
+          font-weight: 400;
         }
-        .cs-charm:hover .cs-charm-tag, .cs-charm:focus-visible .cs-charm-tag { opacity: 1; max-height: 3.2em; margin-top: 0.45rem; }
-        
-        .cs-footer { text-align: center; margin-top: 4rem; }
-        .cs-cta {
-          font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 0.92rem; letter-spacing: 0.02em; color: #F5F5DC;
-          text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; padding-bottom: 3px;
-          background-image: linear-gradient(#F5F5DC, #F5F5DC); background-repeat: no-repeat; background-position: left bottom;
-          background-size: 0% 1.5px; transition: background-size .35s ease, gap .35s ease, color .35s ease;
+
+        .cc-grid{
+          display: grid;
+          grid-template-columns: repeat(6, 1fr);
+          grid-auto-rows: auto;
+          gap: 16px;
         }
-        .cs-cta:hover { background-size: 100% 1.5px; gap: 0.75rem; color: #FFFFFF; }
-        .cs-cta svg { width: 16px; height: 16px; transition: transform .35s ease; }
-        .cs-cta:hover svg { transform: translateX(2px); }
-        
-        @media (max-width: 600px) { .collections-section { padding: 4.5rem 1.25rem 3.5rem; } .cs-header { margin-bottom: 3rem; } }
-        @media (prefers-reduced-motion: reduce) {
-          .cs-thread-path, .cs-clasp, .cs-charm, .cs-charm-orb, .cs-cta { transition-duration: .01ms !important; animation: none !important; }
+
+        .cc-card{
+          position: relative;
+          aspect-ratio: 1 / 1;
+          border-radius: 22px;
+          overflow: hidden;
+          display: block;
+          text-decoration: none;
+          color: #fff;
+          isolation: isolate;
+          cursor: pointer;
+          opacity: 0;
+          transform: translateY(28px);
+          transition: opacity .7s var(--ease), transform .7s var(--ease),
+                      box-shadow .45s var(--ease);
+          box-shadow: 0 0 0 rgba(46,22,38,0);
+        }
+        .cc-card.is-visible{ opacity: 1; transform: translateY(0); }
+        .cc-card:nth-child(1){ transition-delay: .02s; }
+        .cc-card:nth-child(2){ transition-delay: .12s; }
+        .cc-card:nth-child(3){ transition-delay: .22s; }
+        .cc-card:nth-child(4){ transition-delay: .32s; }
+        .cc-card:nth-child(5){ transition-delay: .42s; }
+
+        @media (max-width: 1024px){
+          .cc-grid{ grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        }
+        @media (max-width: 720px){
+          .cc-grid{ grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        }
+
+        .cc-media{
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(155deg, rgba(46,22,38,.12) 0%, rgba(46,22,38,.55) 100%),
+            var(--img);
+          background-size: cover;
+          background-position: center;
+          transform: scale(1.08);
+          transition: transform .9s var(--ease), filter .9s var(--ease);
+        }
+        .cc-card:hover .cc-media{ transform: scale(1.18) rotate(.4deg); }
+
+        .cc-icon-wrap{
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: .5;
+          transform: scale(1);
+          transition: transform .9s var(--ease), opacity .5s var(--ease);
+        }
+        .cc-card:hover .cc-icon-wrap{ transform: scale(1.1) rotate(-3deg); opacity: .32; }
+        .cc-icon-wrap svg{ width: 34%; height: 34%; }
+        .cc-hero .cc-icon-wrap svg{ width: 26%; height: 26%; }
+
+        .cc-shine{
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(115deg, transparent 40%, rgba(231,214,168,.55) 50%, transparent 60%);
+          transform: translateX(-120%);
+          z-index: 3;
+          pointer-events: none;
+        }
+        .cc-card:hover .cc-shine{ animation: shineSweep 1.1s var(--ease); }
+        @keyframes shineSweep{
+          to{ transform: translateX(120%); }
+        }
+
+        .cc-tag{
+          position: absolute;
+          top: 14px;
+          left: 18px;
+          z-index: 4;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 6px 12px 6px 10px;
+          background: var(--ivory);
+          color: var(--plum);
+          font-family: var(--font-inter), 'Jost', sans-serif;
+          font-size: 11px;
+          font-weight: 500;
+          letter-spacing: .05em;
+          text-transform: uppercase;
+          border-radius: 3px 9px 9px 3px;
+          box-shadow: 0 6px 14px rgba(46,22,38,.22);
+          transform-origin: top left;
+          animation: sway 4.5s ease-in-out infinite;
+        }
+        .cc-tag::before{
+          content:"";
+          width: 6px; height: 6px;
+          border-radius: 50%;
+          background: var(--ivory);
+          border: 1.5px solid var(--plum);
+        }
+        .cc-tag::after{
+          content:"";
+          position: absolute;
+          left: 4px;
+          top: -9px;
+          width: 1px;
+          height: 9px;
+          background: rgba(46,22,38,.5);
+        }
+        .cc-card:hover .cc-tag{ animation: swayHover .6s ease-in-out; }
+
+        @keyframes sway{
+          0%,100%{ transform: rotate(-3deg); }
+          50%{ transform: rotate(3deg); }
+        }
+        @keyframes swayHover{
+          0%{ transform: rotate(-3deg); }
+          30%{ transform: rotate(9deg); }
+          60%{ transform: rotate(-7deg); }
+          100%{ transform: rotate(-3deg); }
+        }
+
+        .cc-info{
+          position: absolute;
+          left: 0; right: 0; bottom: 0;
+          z-index: 3;
+          padding: 14px 14px 16px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-end;
+          gap: 6px;
+        }
+
+        .cc-info-text {
+          transform: translateY(4px);
+          transition: transform .45s var(--ease);
+        }
+        .cc-card:hover .cc-info-text {
+          transform: translateY(0);
+        }
+
+        .cc-info-text h3{
+          font-family: var(--font-playfair), 'Cormorant Garamond', serif;
+          font-style: italic;
+          font-weight: 600;
+          font-size: 20px;
+          margin: 0 0 2px;
+          letter-spacing: .01em;
+          color: #fff;
+        }
+
+        .cc-count{
+          font-size: 11.5px;
+          letter-spacing: .08em;
+          text-transform: uppercase;
+          color: #fff;
+          font-weight: 500;
+          opacity: 0.8;
+          transition: opacity .45s var(--ease);
+        }
+        .cc-card:hover .cc-count {
+          opacity: 1;
+        }
+
+        .cc-arrow{
+          flex-shrink: 0;
+          width: 28px; height: 28px;
+          border-radius: 50%;
+          border: 1px solid rgba(255,255,255,.55);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transform: translateX(0) rotate(0deg);
+          transition: transform .45s var(--ease), background .45s var(--ease), border-color .45s var(--ease);
+          align-self: flex-end;
+          margin-top: -18px;
+        }
+        .cc-arrow svg{ width: 14px; height: 14px; transition: transform .45s var(--ease); }
+        .cc-card:hover .cc-arrow{
+          background: var(--gold);
+          border-color: var(--gold);
+          transform: rotate(45deg);
+        }
+        .cc-card:hover .cc-arrow svg{ transform: rotate(-45deg); }
+
+        @media (prefers-reduced-motion: reduce){
+          .cc-card, .cc-header, .cc-media, .cc-icon-wrap, .cc-arrow, .cc-tag{
+            transition: none !important;
+            animation: none !important;
+          }
         }
       `}} />
 
-      <div className="cs-inner">
-        <div className="cs-header">
-          <span className="cs-eyebrow">Shop by style</span>
-          <h2 className="cs-heading">Find the strand<br/><em>made for you</em></h2>
-          <p className="cs-sub">Browse our collections the way you'd browse a jewelry box.</p>
+      <div className="cc-inner">
+        <div className="cc-header" data-reveal>
+          <p className="cc-eyebrow">Shop by category</p>
+          <h2 className="cc-heading">Every piece, <em>perfectly you</em></h2>
+          <p className="cc-sub">Handcrafted in small batches — browse the collection the way you'd browse a jewelry box.</p>
         </div>
 
-        <div className="cs-stage-wrap">
-          <div className="cs-stage">
-            <svg className="cs-thread-svg" viewBox="0 0 1000 300" preserveAspectRatio="none" aria-hidden="true">
-              <path className="cs-clasp" d="M 18 150 a 14 14 0 1 0 0.1 0" />
-              <path ref={pathRef} className="cs-thread-path"
-                    d="M 30 150 C 100 60, 180 240, 250 150 S 400 60, 470 150 S 620 240, 690 150 S 840 60, 910 150 S 960 190, 980 150" />
-              <path className="cs-clasp" d="M 982 150 a 14 14 0 1 0 0.1 0" />
-            </svg>
+        <div className="cc-grid">
+          {categories.map((category, i) => {
+            const style = cardStyles[i] || cardStyles[cardStyles.length - 1];
+            const svg = SVGs[i] || genericSvg;
+            const bgImg = category.image ? `url('${category.image}')` : style.bg;
 
-            {categories.map((category, i) => (
-              <button 
+            return (
+              <a
                 key={category.id}
-                className="cs-charm" 
-                type="button" 
-                onClick={() => router.push(`/shop?category=${category.slug}`)}
-                style={charmPositions[i] ? { left: charmPositions[i].left, top: charmPositions[i].top } : {}}
+                href={`/shop?category=${category.slug}`}
+                className="cc-card"
+                data-reveal
+                style={{ '--img': bgImg } as React.CSSProperties}
               >
-                <span className="cs-charm-orb">
-                  {SVGs[i] || genericSvg}
-                </span>
-                <span className="cs-charm-label">{category.name}</span>
-                <span className="cs-charm-tag">{category._count?.products || 0} Pieces</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="cs-footer">
-          <Link href="/shop" className="cs-cta">
-            View all collections
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </Link>
+                <div className="cc-media" />
+                <div className="cc-icon-wrap">{svg}</div>
+                <div className="cc-shine" />
+                {style.tag && <span className="cc-tag">{style.tag}</span>}
+                <div className="cc-info">
+                  <div className="cc-info-text">
+                    <h3>{category.name}</h3>
+                    <span className="cc-count">
+                      {category._count?.products === 1 ? '1 piece' : `${category._count?.products || 0} pieces`}
+                    </span>
+                  </div>
+                  <span className="cc-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="5" y1="19" x2="19" y2="5"/>
+                      <polyline points="8 5 19 5 19 16"/>
+                    </svg>
+                  </span>
+                </div>
+              </a>
+            );
+          })}
         </div>
       </div>
     </section>
