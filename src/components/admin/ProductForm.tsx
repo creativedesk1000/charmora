@@ -79,7 +79,7 @@ export default function ProductForm({ onClose, onSuccess, product, categories }:
                 }
                 return { ...prev, image: "" };
             }
-            return { ...prev, images: prev.images.filter(img => img !== url) };
+            return { ...prev, images: prev.images.filter((img: string) => img !== url) };
         });
     };
 
@@ -223,7 +223,7 @@ export default function ProductForm({ onClose, onSuccess, product, categories }:
                                         <span className="absolute bottom-1 right-1 bg-black/60 text-white text-[8px] uppercase tracking-wider px-1.5 py-0.5 rounded">Primary</span>
                                     </div>
                                 )}
-                                {formData.images.map((img, idx) => (
+                                {formData.images.map((img: string, idx: number) => (
                                     <div key={idx} className="relative aspect-square rounded-xl overflow-hidden group border border-neutral-200">
                                         <img src={img} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
                                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
