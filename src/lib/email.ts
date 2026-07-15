@@ -104,3 +104,44 @@ export async function sendOrderStatusUpdate(order: any, previousStatus?: string)
     return false;
   }
 }
+
+export async function sendPaymentStatusEmail(order: any) {
+  try {
+    let subject = "";
+    let message = "";
+
+    if (order.paymentStatus === "PAYMENT_VERIFIED") {
+      subject = `Payment Verified - Order #${order.id}`;
+      message = `<p>Great news! Your payment for order <strong>#${order.id}</strong> has been successfully verified.</p>
+                 <p>We are now processing your order and will notify you once it ships.</p>`;
+    } else if (order.paymentStatus === "REJECTED") {
+      subject = `Payment Issue - Order #${order.id}`;
+      message = `<p>There is an issue with the payment for your order <strong>#${order.id}</strong>.</p>
+                 <p><strong>Reason for rejection:</strong> ${order.rejectionReason}</p>
+                 <p>Please contact our support team to resolve this issue.</p>`;
+    } else {
+      return false; // Don't send for other payment statuses
+    }
+
+    const customerHtml = `
+      <div style="font-family: sans-serif; max-width: 600px; margin: auto;">
+        <h2 style="color: #7A2E3A;">Hi ${order.customerName},</h2>
+        ${message}
+        <br/>
+        <p>Warm regards,<br/>Cinderella's Charmora</p>
+      </div>
+    `;
+
+    await transporter.sendMail({
+      from: `"Cinderella's Charmora" <${process.env.EMAIL_USER}>`,
+      to: order.customerEmail,
+      subject: subject,
+      html: customerHtml,
+    });
+
+    return true;
+  } catch (error) {
+    console.error("Error sending payment status email:", error);
+    return false;
+  }
+}

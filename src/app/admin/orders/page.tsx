@@ -6,7 +6,14 @@ import OrdersClient from "@/app/admin/orders/OrdersClient";
 export default async function OrdersPage() {
     const orders = await prisma.order.findMany({
         include: {
-            items: true
+            items: {
+                include: {
+                    product: true
+                }
+            },
+            verifiedBy: {
+                select: { name: true, email: true }
+            }
         },
         orderBy: { createdAt: "desc" }
     });

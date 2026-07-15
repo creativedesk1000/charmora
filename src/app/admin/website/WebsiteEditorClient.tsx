@@ -17,7 +17,9 @@ export default function WebsiteEditorClient({ initialConfig }: { initialConfig: 
         const res = await updateSiteConfig({
             logoUrl: config.logoUrl,
             navMenu: config.navMenu,
-            footer: config.footer
+            footer: config.footer,
+            deliveryCharges: typeof config.deliveryCharges !== 'undefined' ? parseFloat(config.deliveryCharges) : 250,
+            paymentMethods: config.paymentMethods
         });
         if (res.success) {
             toast.success("Website configuration saved!");
@@ -98,7 +100,7 @@ export default function WebsiteEditorClient({ initialConfig }: { initialConfig: 
             </div>
 
             <div className="flex gap-2 border-b border-neutral-100 pb-2">
-                {["Menu", "Logo", "Footer"].map(tab => (
+                {["Menu", "Logo", "Footer", "Store Settings"].map(tab => (
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
@@ -231,6 +233,95 @@ export default function WebsiteEditorClient({ initialConfig }: { initialConfig: 
                                         <button onClick={() => removeFooterLink(i)} className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors">
                                             <Trash2 size={18} />
                                         </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === "Store Settings" && (
+                    <div className="space-y-8">
+                        <div>
+                            <h3 className="font-serif font-bold text-xl text-neutral-900 mb-4">Delivery Charges (Rs)</h3>
+                            <input 
+                                type="number" 
+                                value={config.deliveryCharges ?? 250}
+                                onChange={(e) => setConfig({...config, deliveryCharges: parseFloat(e.target.value)})}
+                                className="w-full max-w-xs bg-neutral-50 border border-neutral-200 rounded-2xl p-4 text-sm focus:outline-none focus:border-neutral-900"
+                            />
+                        </div>
+
+                        <div>
+                            <div className="flex justify-between items-center mb-4">
+                                <h3 className="font-serif font-bold text-xl text-neutral-900">Payment Methods</h3>
+                                <button onClick={() => {
+                                    const newMethods = [...(config.paymentMethods || []), { id: `method-${Date.now()}`, name: "New Method", type: "manual", active: true, details: "" }];
+                                    setConfig({...config, paymentMethods: newMethods});
+                                }} className="flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-xl hover:bg-emerald-100">
+                                    <Plus size={14} /> Add Method
+                                </button>
+                            </div>
+                            
+                            <div className="space-y-4">
+                                {(config.paymentMethods || []).map((method: any, i: number) => (
+                                    <div key={i} className="flex flex-col gap-3 bg-neutral-50 p-4 rounded-2xl border border-neutral-100">
+                                        <div className="flex flex-wrap items-center gap-4">
+                                            <input 
+                                                type="text" 
+                                                value={method.name} 
+                                                onChange={(e) => {
+                                                    const newMethods = [...config.paymentMethods];
+                                                    newMethods[i].name = e.target.value;
+                                                    setConfig({...config, paymentMethods: newMethods});
+                                                }}
+                                                placeholder="Method Name (e.g. EasyPaisa, COD)"
+                                                className="flex-1 bg-white border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-neutral-900 min-w-[150px]"
+                                            />
+                                            <select 
+                                                value={method.type}
+                                                onChange={(e) => {
+                                                    const newMethods = [...config.paymentMethods];
+                                                    newMethods[i].type = e.target.value;
+                                                    setConfig({...config, paymentMethods: newMethods});
+                                                }}
+                                                className="bg-white border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-neutral-900"
+                                            >
+                                                <option value="manual">Manual (Bank/EasyPaisa)</option>
+                                                <option value="cod">Cash on Delivery</option>
+                                            </select>
+                                            <label className="flex items-center gap-2 text-sm cursor-pointer">
+                                                <input 
+                                                    type="checkbox"
+                                                    checked={method.active !== false}
+                                                    onChange={(e) => {
+                                                        const newMethods = [...config.paymentMethods];
+                                                        newMethods[i].active = e.target.checked;
+                                                        setConfig({...config, paymentMethods: newMethods});
+                                                    }}
+                                                    className="w-4 h-4 rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900"
+                                                />
+                                                Active
+                                            </label>
+                                            <button onClick={() => {
+                                                const newMethods = [...config.paymentMethods];
+                                                newMethods.splice(i, 1);
+                                                setConfig({...config, paymentMethods: newMethods});
+                                            }} className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors">
+                                                <Trash2 size={18} />
+                                            </button>
+                                        </div>
+                                        <input 
+                                            type="text" 
+                                            value={method.details || ""} 
+                                            onChange={(e) => {
+                                                const newMethods = [...config.paymentMethods];
+                                                newMethods[i].details = e.target.value;
+                                                setConfig({...config, paymentMethods: newMethods});
+                                            }}
+                                            placeholder="Instructions or Account Details (optional)"
+                                            className="w-full bg-white border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-neutral-900"
+                                        />
                                     </div>
                                 ))}
                             </div>

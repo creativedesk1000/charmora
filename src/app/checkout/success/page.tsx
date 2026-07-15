@@ -22,6 +22,7 @@ export default async function OrderSuccessPage({ searchParams }: { searchParams:
                         <span className="font-mono font-bold text-charmora-purple text-lg mt-2 inline-block bg-neutral-50 px-4 py-2 rounded-xl border border-neutral-100 select-all">{id}</span>
                         <br />
                         <span className="text-[10px] block mt-2 opacity-60">Please save this ID to track your shipment.</span>
+                        <span className="text-[10px] block mt-3 text-amber-600/80">Your EasyPaisa payment receipt is being reviewed. We will process your order once payment is verified.</span>
                     </p>
                     <div className="space-y-4">
                         <Link href={`/track?id=${id}`} className="block w-full py-4 bg-charmora-purple text-white rounded-2xl font-bold tracking-widest hover:bg-charmora-purple/90 transition-colors shadow-lg">

@@ -3,7 +3,9 @@
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { supabase } from "@/lib/supabase";
-import { sendOrderConfirmation, sendOrderStatusUpdate } from "@/lib/email";
+import { sendOrderConfirmation, sendOrderStatusUpdate, sendPaymentStatusEmail } from "@/lib/email";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 // Product Actions
 export async function uploadProductImage(formData: FormData) {
@@ -217,9 +219,50 @@ export async function toggleUserStatus(id: string, currentStatus: string) {
     }
 }
 // Order Actions
+export async function uploadPaymentReceipt(formData: FormData) {
+    try {
+        const file = formData.get("file") as File;
+        if (!file) throw new Error("No file provided");
+
+        const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+        if (!allowedTypes.includes(file.type)) {
+            throw new Error("Please upload a valid image file (JPG, PNG, or WebP).");
+        }
+
+        const fileExt = file.name.split(".").pop();
+        const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+        const filePath = `receipts/${fileName}`;
+
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+
+        const { error: uploadError } = await supabase.storage
+            .from("products")
+            .upload(filePath, buffer, {
+                contentType: file.type,
+                upsert: true,
+            });
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+            .from("products")
+            .getPublicUrl(filePath);
+
+        return { success: true, url: publicUrl };
+    } catch (error: any) {
+        console.error("Upload Payment Receipt Error:", error);
+        return { success: false, error: error.message || "Failed to upload payment receipt." };
+    }
+}
+
 export async function placeOrder(data: any) {
     try {
-        const { items, ...customerInfo } = data;
+        const { items, receiptImage, ...customerInfo } = data;
+
+        if (!receiptImage) {
+            return { success: false, error: "Please upload your payment receipt before placing the order." };
+        }
 
         const order = await prisma.$transaction(async (tx) => {
             const newOrder = await tx.order.create({
@@ -227,10 +270,13 @@ export async function placeOrder(data: any) {
                     customerName: customerInfo.name,
                     customerEmail: customerInfo.email,
                     phone: customerInfo.phone,
-                    address: customerInfo.address,
+                    address: customerInfo.address + (customerInfo.state ? `\nState: ${customerInfo.state}` : ""),
                     city: customerInfo.city,
                     totalAmount: parseFloat(customerInfo.total),
-                    paymentMethod: "COD",
+                    paymentMethod: "EASYPAISA",
+                    paymentStatus: "PENDING_PAYMENT_VERIFICATION",
+                    receiptImage,
+                    receiptUploadedAt: new Date(),
                     status: "PENDING",
                     items: {
                         create: items.map((item: any) => ({
@@ -257,8 +303,8 @@ export async function placeOrder(data: any) {
             return newOrder;
         });
 
-        // Send Email Confirmations asynchronously so it doesn't block the UI
-        sendOrderConfirmation(order).catch(console.error);
+        // Send Email Confirmations before returning
+        await sendOrderConfirmation(order);
 
         revalidatePath("/admin/orders");
         return { success: true, orderId: order.id };
@@ -271,13 +317,28 @@ export async function placeOrder(data: any) {
 export async function updateOrder(id: string, data: any) {
     try {
         console.log("Updating order intelligence:", id, data);
+
+        if (data.status === "PROCESSING") {
+            const existing = await prisma.order.findUnique({ where: { id } });
+            if (!existing) {
+                return { success: false, error: "Order not found." };
+            }
+            const allowedPaymentStatuses = ["PAYMENT_VERIFIED", "PROCESSING", "COMPLETED"];
+            if (!allowedPaymentStatuses.includes(existing.paymentStatus)) {
+                return {
+                    success: false,
+                    error: "Payment must be verified before moving this order to Processing.",
+                };
+            }
+        }
+
         const updated = await prisma.order.update({
             where: { id },
             data
         });
         
-        // Send email update asynchronously
-        sendOrderStatusUpdate(updated).catch(console.error);
+        // Send email update
+        await sendOrderStatusUpdate(updated);
 
         console.log("Order intelligence updated successfully:", updated.id);
         revalidatePath("/admin/orders");
@@ -290,6 +351,61 @@ export async function updateOrder(id: string, data: any) {
         };
     }
 }
+
+export async function updatePaymentStatus(
+    id: string,
+    data: { paymentStatus: string; rejectionReason?: string }
+) {
+    try {
+        const session = await getServerSession(authOptions);
+        if (!session || (session.user as any).role !== "ADMIN") {
+            return { success: false, error: "Unauthorized." };
+        }
+
+        const existing = await prisma.order.findUnique({ where: { id } });
+        if (!existing) {
+            return { success: false, error: "Order not found." };
+        }
+
+        if (data.paymentStatus === "REJECTED" && !data.rejectionReason?.trim()) {
+            return { success: false, error: "Please provide a rejection reason." };
+        }
+
+        const updateData: Record<string, unknown> = {
+            paymentStatus: data.paymentStatus,
+        };
+
+        if (data.paymentStatus === "PAYMENT_VERIFIED") {
+            updateData.verifiedAt = new Date();
+            updateData.verifiedById = (session.user as any).id;
+            updateData.rejectionReason = null;
+        } else if (data.paymentStatus === "REJECTED") {
+            updateData.rejectionReason = data.rejectionReason?.trim();
+        }
+
+        const updated = await prisma.order.update({
+            where: { id },
+            data: updateData,
+            include: {
+                verifiedBy: { select: { name: true, email: true } },
+                items: { include: { product: true } },
+            },
+        });
+        
+        // Send payment status email
+        await sendPaymentStatusEmail(updated);
+
+        revalidatePath("/admin/orders");
+        return { success: true, order: updated };
+    } catch (error: any) {
+        console.error("Update Payment Status Error:", error);
+        return {
+            success: false,
+            error: error.message || "Failed to update payment status.",
+        };
+    }
+}
+
 export async function deleteOrder(id: string) {
     try {
         // First delete associated OrderItems
@@ -387,5 +503,16 @@ export async function updateSiteConfig(data: any) {
     } catch (error: any) {
         console.error("Update Site Config Error:", error);
         return { success: false, error: "Failed to update website configuration." };
+    }
+}
+
+export async function getSiteConfig() {
+    try {
+        const config = await prisma.siteConfig.findUnique({
+            where: { id: "default" }
+        });
+        return { success: true, config };
+    } catch (error) {
+        return { success: false, error: "Failed to fetch site config." };
     }
 }
